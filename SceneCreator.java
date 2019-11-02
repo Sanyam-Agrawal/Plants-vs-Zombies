@@ -6,12 +6,5 @@
 import javafx.scene.Scene;
 
 public interface SceneCreator{
-	/**
-	 * This creates a Scene object depending on
-	 * how the body of this method is defined.
-	 *
-	 * @param Nothing.
-	 * @return Scene A Scene object that is defined in implementing classes.
-	*/
 	public Scene createScene();
 }

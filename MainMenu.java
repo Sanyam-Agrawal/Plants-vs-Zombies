@@ -4,6 +4,9 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+import javafx.scene.control.*; 
+import javafx.scene.control.Alert.AlertType; 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 
 import javafx.scene.control.Button;
@@ -31,20 +34,39 @@ public class MainMenu implements SceneCreator {
         BorderPane root = new BorderPane();
         VBox menuVBox = new VBox(10.0);
         //START START START START START START START START START START START START START START START START START
-        Button new_game = new Button("New Game");
-        new_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
-        new_game.setStyle("-fx-background-color: #32CD32");
-        EventHandler<ActionEvent> new_game_event = new EventHandler<ActionEvent>() { 
+        Button start_game = new Button("Start Game");
+        start_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
+        start_game.setStyle("-fx-background-color: #32CD32");
+        EventHandler<ActionEvent> start_game_event = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 { 
 
                 } 
             }; 
 
-        new_game.setTranslateX(5);
-        new_game.setId("new_game_button");
-        new_game.setOnAction(new_game_event); 
-        menuVBox.getChildren().add(new_game);
+        Alert a = new Alert(AlertType.INFORMATION,"FYI"); 
+        a.setContentText("This feature is not yet implemented!!"); 
+        start_game.setTranslateX(5);
+        start_game.setId("start_game_button");
+        start_game.setOnAction(start_game_event); 
+        menuVBox.getChildren().add(start_game);
+
+        Button choose_level = new Button("Choose Level");
+        choose_level.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
+        choose_level.setStyle("-fx-background-color: #32CD32");
+        EventHandler<ActionEvent> choose_level_event = new EventHandler<ActionEvent>() { 
+                public void handle(ActionEvent e) 
+                { 
+
+                    // show the dialog 
+                    a.show(); 
+                } 
+            }; 
+
+        choose_level.setId("choose_level_button");
+        choose_level.setTranslateX(-5);
+        choose_level.setOnAction(choose_level_event); 
+        menuVBox.getChildren().add(choose_level);
 
         Button load_game = new Button("Load Game");
         load_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
@@ -52,11 +74,11 @@ public class MainMenu implements SceneCreator {
         EventHandler<ActionEvent> load_game_event = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 { 
-
+                    a.show();
                 } 
             }; 
 
-        new_game.setOnAction(load_game_event); 
+        load_game.setOnAction(load_game_event); 
         menuVBox.getChildren().add(load_game);
 
         Button exit = new Button("Exit");
@@ -66,11 +88,11 @@ public class MainMenu implements SceneCreator {
         EventHandler<ActionEvent> exit_event = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 { 
-                    System.exit(0);
+                    Platform.exit();
                 } 
             }; 
 
-        new_game.setOnAction(exit_event); 
+        exit.setOnAction(exit_event); 
         menuVBox.getChildren().add(exit);
 
         menuVBox.setTranslateX(430);

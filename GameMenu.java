@@ -23,7 +23,7 @@ public class GameMenu extends Scenes
     {
         BorderPane root=new BorderPane();
         VBox menuVBox = new VBox(10.0);
-        
+
         Alert a = new Alert(AlertType.INFORMATION); 
         a.setContentText("This feature is not yet implemented!!"); 
 

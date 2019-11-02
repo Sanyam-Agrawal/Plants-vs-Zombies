@@ -15,6 +15,7 @@ public class Background extends Scenes
         super(app,st);
     }
 
+    @Override
     public Scene createScene(){
         GridPane grid=new GridPane();
         grid.setAlignment(Pos.CENTER);

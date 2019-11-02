@@ -13,9 +13,9 @@ import javafx.application.*;
 
 public class App extends Application
 {
-    private  Scenes main_menu,background;
+    private  Scenes main_menu,background,game_menu;
     
-    private  Scene background_scene,main_menu_scene;
+    private  Scene background_scene,main_menu_scene,game_menu_scene;
     public App()
     {
         
@@ -24,9 +24,11 @@ public class App extends Application
     {
         this.main_menu=new MainMenu(this,stage);
         this.background=new Background(this,stage);
+        this.game_menu=new GameMenu(this,stage);
 
         this.main_menu_scene=main_menu.createScene();
         this.background_scene=background.createScene();
+        this.game_menu_scene=game_menu.createScene();
     }
 
     public Scene getMainMenuScene()
@@ -37,6 +39,11 @@ public class App extends Application
     public Scene getBackgroundScene()
     {
         return background_scene;
+    }
+
+    public Scene getGameMenuScene()
+    {
+        return game_menu_scene;
     }
 
     @Override

@@ -1,0 +1,7 @@
+.root {
+    
+     -fx-background-image: url("main_menu_background.jpg");
+     -fx-background-size: 1100px 600px;
+     -fx-width: 500px;
+      -fx-height: 500px;
+}

@@ -13,21 +13,25 @@ import javafx.application.*;
 
 public class App extends Application
 {
-    private  Scenes main_menu,background,game_menu;
+    private Scenes main_menu, background, game, game_menu;
     
-    private  Scene background_scene,main_menu_scene,game_menu_scene;
+    private Scene background_scene, main_menu_scene, game_scene, game_menu_scene;
+    
     public App()
     {
         
     }
+
     public App(Stage stage)
     {
         this.main_menu=new MainMenu(this,stage);
         this.background=new Background(this,stage);
+        this.game=new Game(this,stage);
         this.game_menu=new GameMenu(this,stage);
 
         this.main_menu_scene=main_menu.createScene();
         this.background_scene=background.createScene();
+        this.game_scene=game.createScene();
         this.game_menu_scene=game_menu.createScene();
     }
 
@@ -41,13 +45,18 @@ public class App extends Application
         return background_scene;
     }
 
+    public Scene getGameScene()
+    {
+        return game_scene;
+    }
+
     public Scene getGameMenuScene()
     {
         return game_menu_scene;
     }
 
     @Override
-    public void start(Stage stage)throws InterruptedException
+    public void start(Stage stage) throws InterruptedException
     {
         stage.setTitle("Plants vs Zombies");
         App myapp=new App(stage);

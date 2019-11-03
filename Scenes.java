@@ -17,12 +17,14 @@ import javafx.application.*;
 
 public abstract class Scenes{
     
-        public Stage stage;
-        public App myapp;
-        public Scenes(App app,Stage st)
-        {
-            stage=st;
-            myapp=app;
-        }
-	public abstract Scene createScene();
+    public Stage stage;
+    public App myapp;
+
+    public Scenes(App app,Stage st)
+    {
+        stage=st;
+        myapp=app;
+    }
+
+    public abstract Scene createScene();
 }

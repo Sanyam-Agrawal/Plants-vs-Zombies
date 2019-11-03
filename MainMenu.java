@@ -19,7 +19,7 @@ public class MainMenu extends Scenes
     }
 
     @Override
-    public   Scene createScene(){
+    public Scene createScene(){
 
         BorderPane root = new BorderPane();
         VBox menuVBox = new VBox(10.0);
@@ -32,9 +32,9 @@ public class MainMenu extends Scenes
             { 
                 public void handle(ActionEvent e) 
                 { 
-
+                    stage.setScene(myapp.getGameScene());
                 } 
-            }; 
+            };
         Alert a = new Alert(AlertType.INFORMATION); 
         a.setContentText("This feature is not yet implemented!!"); 
         start_game.setOnAction(start_game_event);
@@ -43,7 +43,7 @@ public class MainMenu extends Scenes
         Button choose_level = new Button("Choose Level");
         choose_level.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
         choose_level.setStyle("-fx-background-color: #32CD32");
-        choose_level.setTranslateX(-5);
+        choose_level.setTranslateX(-10);
         EventHandler<ActionEvent> choose_level_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 
@@ -57,6 +57,7 @@ public class MainMenu extends Scenes
         Button load_game = new Button("Load Game");
         load_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
         load_game.setStyle("-fx-background-color: #32CD32");
+        load_game.setTranslateX(8);
         EventHandler<ActionEvent> load_game_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 
@@ -70,7 +71,7 @@ public class MainMenu extends Scenes
         Button exit = new Button("Exit");
         exit.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
         exit.setStyle("-fx-background-color: #32CD32");
-        exit.setTranslateX(50);
+        exit.setTranslateX(70);
         EventHandler<ActionEvent> exit_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 

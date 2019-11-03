@@ -30,12 +30,12 @@ public class GameMenu extends Scenes
         Button resume_game = new Button("Resume Game");
         resume_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
         resume_game.setStyle("-fx-background-color: #32CD32");
-        resume_game.setTranslateX(-5);
+        resume_game.setTranslateX(-20);
         EventHandler<ActionEvent> resume_game_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 
                 { 
-                    a.show();
+                    stage.setScene(myapp.getGameScene());
                 } 
             }; 
         resume_game.setOnAction(resume_game_event);
@@ -44,7 +44,7 @@ public class GameMenu extends Scenes
         Button save_game = new Button("Save Game");
         save_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
         save_game.setStyle("-fx-background-color: #32CD32");
-        save_game.setTranslateX(7);
+        save_game.setTranslateX(8);
         EventHandler<ActionEvent> save_game_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 
@@ -58,6 +58,7 @@ public class GameMenu extends Scenes
         Button restart_game = new Button("Restart Level");
         restart_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
         restart_game.setStyle("-fx-background-color: #32CD32");
+        restart_game.setTranslateX(-5);
         EventHandler<ActionEvent> restart_game_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 
@@ -71,7 +72,7 @@ public class GameMenu extends Scenes
         Button exit = new Button("Exit");
         exit.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
         exit.setStyle("-fx-background-color: #32CD32");
-        exit.setTranslateX(50);
+        exit.setTranslateX(70);
         EventHandler<ActionEvent> exit_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 
@@ -85,6 +86,7 @@ public class GameMenu extends Scenes
         menuVBox.setTranslateX(430);
         menuVBox.setTranslateY(50);
         root.setCenter(menuVBox);
+
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(MainMenu.class.getResource("game_menu.css").toExternalForm());
         return scene;

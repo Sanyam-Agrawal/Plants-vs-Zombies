@@ -8,6 +8,7 @@ import javafx.scene.*;
 import javafx.scene.text.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
+
 public class Background extends Scenes
 {
     public Background(App app,Stage st)

@@ -4,7 +4,7 @@ public abstract class Plants extends Creature
     private Tile tile = null;
 
     public Plants(String imgSrc, int cost){
-        super(game, imgSrc);
+        super(imgSrc);
         this.cost = cost;
     }
 

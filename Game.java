@@ -48,21 +48,87 @@ public class Game extends Scenes
         root.setCenter(this.createCenterTiles());
 
         root.getChildren().add(this.createLawnMower());
+        root.getChildren().add(this.placePeashooter());
+        VBox zom=this.placeZombie();
+        root.getChildren().add(zom);
+        root.getChildren().add(this.placeZombie());
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                root.getChildren().add(createSun());
-            }
-        }));
+                        @Override
+                        public void handle(ActionEvent event) {
+                            root.getChildren().add(createSun());
+                        }
+                    }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
 
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(Game.class.getResource("game.css").toExternalForm());
 
+        placeZombie();
         move_mower[2].setCycleCount(1); 
+
         move_mower[2].play(); 
+        Timeline oneSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(0.7), new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            zom.getChildren().clear();
+                        }
+                    }));
+        oneSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+        oneSecondsWonder.play();
         return scene;
+    }
+
+    public VBox placeZombie()
+    {
+        VBox zombie = new VBox(50);
+        zombie.setSpacing(40);
+        zombie.setMaxWidth(250.0);
+        zombie.setMaxHeight(100.0);
+        Creature zom=new Zombies();
+        Image image = new Image(zom.getImgSrc());
+        ImageView view_image= new ImageView(image);
+        // view_image.setFitHeight(70);
+        // view_image.setFitWidth(70);
+
+        zombie.getChildren().add(view_image);
+        TranslateTransition move_zombie =new TranslateTransition();
+        move_zombie.setDuration(Duration.millis(5000)); 
+        //Setting the node for the transition 
+        move_zombie.setNode(view_image); 
+
+        //Setting the value of the transition along the x axis. 
+        move_zombie.setByX(-150);
+
+        //Setting the cycle count for the transition 
+        move_zombie.setCycleCount(1); 
+
+        //Setting auto reverse value to false 
+        // move_zombie.setAutoReverse(false); 
+
+        //Playing the animation 
+        zombie.setTranslateX(300);
+        zombie.setTranslateY(200);
+        move_zombie.play();
+        return zombie;
+    }
+
+    public VBox placePeashooter()
+    {
+        VBox v_plant = new VBox(50);
+        v_plant.setSpacing(40);
+        v_plant.setMaxWidth(250.0);
+        v_plant.setMaxHeight(100.0);
+        Creature plant=new PeaShooter();
+        Image image = new Image(plant.getImgSrc());
+        ImageView view_image= new ImageView(image);
+        // view_image.setFitHeight(70);
+        // view_image.setFitWidth(70);
+
+        v_plant.getChildren().add(view_image);
+        v_plant.setTranslateX(280);
+        v_plant.setTranslateY(90);
+        return v_plant;
     }
 
     public VBox createCenterTiles(){

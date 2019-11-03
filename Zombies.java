@@ -3,7 +3,7 @@ public class Zombies extends Creature
     private Tile tile = null;
 
     public Zombies(){
-        this.imgSrc = ;
+        super("z_normal.gif");
     }
 
     public Zombies(String imgSrc){

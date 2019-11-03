@@ -1,4 +1,5 @@
 *.class
 *.ctxt
+README.TXT
 package.bluej
 doc/

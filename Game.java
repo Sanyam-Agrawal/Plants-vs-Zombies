@@ -37,8 +37,6 @@ public class Game extends Scenes
         game_menu.setOnAction(game_menu_event);
         gameVBox.getChildren().add(game_menu);
 
-        
-
         root.setCenter(gameVBox);
 
         Scene scene=new Scene(root,1100,600);

@@ -51,7 +51,6 @@ public class Game extends Scenes
         root.getChildren().add(this.placePeashooter());
         VBox zom=this.placeZombie();
         root.getChildren().add(zom);
-        root.getChildren().add(this.placeZombie());
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
@@ -64,7 +63,6 @@ public class Game extends Scenes
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(Game.class.getResource("game.css").toExternalForm());
 
-        placeZombie();
         move_mower[2].setCycleCount(1); 
 
         move_mower[2].play(); 

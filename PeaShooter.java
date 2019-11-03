@@ -1,7 +1,5 @@
 public class PeaShooter extends Plants
 {
-    private Tile tile = null;
-
     public PeaShooter(){
         super("Peashooter.gif",100);
     }

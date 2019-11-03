@@ -90,8 +90,4 @@ public class MainMenu extends Scenes
         scene.getStylesheets().add(MainMenu.class.getResource("main_menu.css").toExternalForm());
         return scene;
     }
-
-    public static void main(String[] args){
-
-    }
 }

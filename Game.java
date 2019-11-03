@@ -13,7 +13,6 @@ import javafx.animation.*;
 import javafx.util.Duration; 
 public class Game extends Scenes
 {
-    private Tile[][] centerTiles = new Tile[5][9];
     private Pane[] centerRows = new Pane[5];
     Pane Lawn_Mower[] = new Pane[5];
     TranslateTransition move_mower[] = new TranslateTransition[5];
@@ -48,7 +47,6 @@ public class Game extends Scenes
         root.getChildren().add(plant_chooser);
         
         root.setLeft(gameVBox);
-        root.setCenter(this.createCenterTiles());
 
         root.getChildren().add(this.createLawnMower());
         root.getChildren().add(this.placePeashooter());
@@ -89,25 +87,14 @@ public class Game extends Scenes
         Creature zom=new Zombies();
         Image image = new Image(zom.getImgSrc());
         ImageView view_image= new ImageView(image);
-        // view_image.setFitHeight(70);
-        // view_image.setFitWidth(70);
 
         zombie.getChildren().add(view_image);
         TranslateTransition move_zombie =new TranslateTransition();
         move_zombie.setDuration(Duration.millis(5000)); 
-        //Setting the node for the transition 
         move_zombie.setNode(view_image); 
-
-        //Setting the value of the transition along the x axis. 
         move_zombie.setByX(-150);
-
-        //Setting the cycle count for the transition 
         move_zombie.setCycleCount(1); 
 
-        //Setting auto reverse value to false 
-        // move_zombie.setAutoReverse(false); 
-
-        //Playing the animation 
         zombie.setTranslateX(300);
         zombie.setTranslateY(200);
         move_zombie.play();
@@ -123,36 +110,11 @@ public class Game extends Scenes
         Creature plant=new PeaShooter();
         Image image = new Image(plant.getImgSrc());
         ImageView view_image= new ImageView(image);
-        // view_image.setFitHeight(70);
-        // view_image.setFitWidth(70);
 
         v_plant.getChildren().add(view_image);
         v_plant.setTranslateX(280);
         v_plant.setTranslateY(90);
         return v_plant;
-    }
-
-    public VBox createCenterTiles(){
-        VBox centerTiles = new VBox(50);
-        centerTiles.setSpacing(55);
-        centerTiles.setMaxWidth(950.0);
-        centerTiles.setMaxHeight(475.0);
-        int centerTilesRowCount = 0;
-        int centerTilesColCount = 0;
-        for (int r=0; r<5; r++){
-            Pane row = new Pane();
-            int startingXCoord = 140;
-            for (int c=0; c<9; c++){
-                Tile tile = new Tile(this, startingXCoord, r, c, Color.TRANSPARENT);
-                this.centerTiles[r][c] = tile;
-                tile.setUpCenterTile();
-                row.getChildren().add(tile);
-                startingXCoord += 81;
-            }
-            this.centerRows[r] = row;
-            centerTiles.getChildren().add(row);
-        }
-        return centerTiles;
     }
 
     public VBox createLawnMower()
@@ -171,19 +133,10 @@ public class Game extends Scenes
             mower.getChildren().add(view_image);
             move_mower[i]=new TranslateTransition();
             move_mower[i].setDuration(Duration.millis(3000)); 
-            //Setting the node for the transition 
             move_mower[i].setNode(view_image); 
-
-            //Setting the value of the transition along the x axis. 
             move_mower[i].setByX(950); 
-
-            //Setting the cycle count for the transition 
             move_mower[i].setCycleCount(1); 
-
-            //Setting auto reverse value to false 
             move_mower[i].setAutoReverse(false); 
-
-            //Playing the animation 
         }
         mower.setTranslateX(170);
         mower.setTranslateY(60);
@@ -198,32 +151,19 @@ public class Game extends Scenes
         sun.setMaxHeight(400.0);
         Image image = new Image("sun.png");
         ImageView view_image= new ImageView(image);
-        // view_image.setFitHeight(70);
-        // view_image.setFitWidth(70);
 
         sun.getChildren().add(view_image);
         TranslateTransition move_sun =new TranslateTransition();
         move_sun.setDuration(Duration.millis(4000)); 
-        //Setting the node for the transition 
         move_sun.setNode(view_image); 
 
-        //Setting the value of the transition along the x axis. 
         move_sun.setByY(1100); 
-
-        //Setting the cycle count for the transition 
         move_sun.setCycleCount(1); 
-
-        //Setting auto reverse value to false 
         move_sun.setAutoReverse(false); 
 
-        //Playing the animation 
         sun.setTranslateX(200+250*Math.random());
         sun.setTranslateY(10);
         move_sun.play();
         return sun;
-    }
-
-    public static void main(String[] args){
-
     }
 }

@@ -125,8 +125,8 @@ public class Tile extends Rectangle{
      */
 	public void setUpCenterTile(){
 		this.setOpacity(0.90);
-		this.setStrokeWidth(2.0);
-		this.setStroke(Color.BLACK);
+		// this.setStrokeWidth(2.0);
+		// this.setStroke(Color.BLACK);
 
 		Tile thisTile = this;
 		this.setOnMouseEntered(new EventHandler<MouseEvent>(){

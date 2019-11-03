@@ -17,6 +17,7 @@ public class Game extends Scenes
     private Pane[] centerRows = new Pane[5];
     Pane Lawn_Mower[] = new Pane[5];
     TranslateTransition move_mower[] = new TranslateTransition[5];
+
     public Game(App app,Stage st)
     {
         super(app,st);
@@ -45,13 +46,22 @@ public class Game extends Scenes
 
         root.setLeft(gameVBox);
         root.setCenter(this.createCenterTiles());
-        
+
         root.getChildren().add(this.createLawnMower());
+        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
+
+    @Override
+    public void handle(ActionEvent event) {
+        root.getChildren().add(createSun());
+    }
+}));
+fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+fiveSecondsWonder.play();
 
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(Game.class.getResource("game.css").toExternalForm());
-        
-            move_mower[2].setCycleCount(100); 
+
+        move_mower[2].setCycleCount(1); 
         move_mower[2].play(); 
         return scene;
     }
@@ -89,15 +99,17 @@ public class Game extends Scenes
         {
             Image image = new Image("lawn_mower.gif");
             ImageView view_image= new ImageView(image);
+            view_image.setFitHeight(70);
+            view_image.setFitWidth(70);
+
             mower.getChildren().add(view_image);
             move_mower[i]=new TranslateTransition();
             move_mower[i].setDuration(Duration.millis(3000)); 
-
             //Setting the node for the transition 
             move_mower[i].setNode(view_image); 
 
             //Setting the value of the transition along the x axis. 
-            move_mower[i].setByX(900); 
+            move_mower[i].setByX(950); 
 
             //Setting the cycle count for the transition 
             move_mower[i].setCycleCount(1); 
@@ -107,9 +119,42 @@ public class Game extends Scenes
 
             //Playing the animation 
         }
-        mower.setTranslateX(160);
-        mower.setTranslateY(50);
+        mower.setTranslateX(170);
+        mower.setTranslateY(60);
         return mower;
+    }
+
+    public VBox createSun()
+    {
+        VBox sun = new VBox(50);
+        sun.setSpacing(40);
+        sun.setMaxWidth(250.0);
+        sun.setMaxHeight(400.0);
+        Image image = new Image("sun.png");
+        ImageView view_image= new ImageView(image);
+        // view_image.setFitHeight(70);
+        // view_image.setFitWidth(70);
+
+        sun.getChildren().add(view_image);
+        TranslateTransition move_sun =new TranslateTransition();
+        move_sun.setDuration(Duration.millis(4000)); 
+        //Setting the node for the transition 
+        move_sun.setNode(view_image); 
+
+        //Setting the value of the transition along the x axis. 
+        move_sun.setByY(1100); 
+
+        //Setting the cycle count for the transition 
+        move_sun.setCycleCount(1); 
+
+        //Setting auto reverse value to false 
+        move_sun.setAutoReverse(false); 
+
+        //Playing the animation 
+        sun.setTranslateX(200+250*Math.random());
+        sun.setTranslateY(10);
+        move_sun.play();
+        return sun;
     }
 
     public static void main(String[] args){

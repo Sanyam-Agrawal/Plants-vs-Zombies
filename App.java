@@ -31,7 +31,7 @@ public class App extends Application
 
         this.main_menu_scene=main_menu.createScene();
         this.background_scene=background.createScene();
-        this.game_scene=game.createScene();
+        //this.game_scene=game.createScene();
         this.game_menu_scene=game_menu.createScene();
     }
 
@@ -47,6 +47,8 @@ public class App extends Application
 
     public Scene getGameScene()
     {
+        if(game_scene==null)
+        game_scene = this.game.createScene();
         return game_scene;
     }
 

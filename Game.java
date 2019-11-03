@@ -16,7 +16,7 @@ public class Game extends Scenes
     private Pane[] centerRows = new Pane[5];
     Pane Lawn_Mower[] = new Pane[5];
     TranslateTransition move_mower[] = new TranslateTransition[5];
-
+    int score=0,progress=0;
     public Game(App app,Stage st)
     {
         super(app,st);
@@ -45,6 +45,7 @@ public class Game extends Scenes
 
         VBox plant_chooser = (new PlantsMenu()).createScene();
         root.getChildren().add(plant_chooser);
+        root.getChildren().add(this.displayScore());
         
         root.setLeft(gameVBox);
 
@@ -77,7 +78,39 @@ public class Game extends Scenes
         oneSecondsWonder.play();
         return scene;
     }
-
+    public HBox displayScore()
+    {
+        HBox scoreboard=new HBox();
+        scoreboard.setSpacing(40);
+        scoreboard.setMaxWidth(900.0);
+        scoreboard.setMaxHeight(500.0);
+        Image image = new Image("sun.png");
+        ImageView view_image= new ImageView(image);
+         Button l_score=new Button(Integer.toString(score));
+        l_score.setFont(Font.font("Serif", FontWeight.EXTRA_BOLD, 30));
+        
+        l_score.setStyle("-fx-background-radius: 4em;");
+        
+        l_score.setTranslateY(10);
+        l_score.setTranslateX(-50);
+        
+        
+        
+         Button b_progress=new Button("Progress = "+this.progress);
+        b_progress.setFont(Font.font("Serif", FontWeight.BOLD, 15));
+        b_progress.setMinWidth(200);
+        b_progress.setTranslateY(20);
+        b_progress.setTranslateX(-50);
+        
+        
+        scoreboard.getChildren().add(view_image);
+        
+        scoreboard.getChildren().add(l_score);
+        scoreboard.getChildren().add(b_progress);
+        scoreboard.setTranslateX(450);
+        scoreboard.setTranslateY(-10);
+        return scoreboard;
+    }
     public VBox placeZombie()
     {
         VBox zombie = new VBox(50);

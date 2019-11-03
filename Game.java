@@ -17,14 +17,15 @@ public class Game extends Scenes
     Pane Lawn_Mower[] = new Pane[5];
     TranslateTransition move_mower[] = new TranslateTransition[5];
     int score=0,progress=0;
+
     public Game(App app,Stage st)
     {
         super(app,st);
     }
 
     @Override
-    public Scene createScene(){
-
+    public Scene createScene()
+    {
         BorderPane root = new BorderPane();
         VBox gameVBox = new VBox(10.0);
 
@@ -46,14 +47,15 @@ public class Game extends Scenes
         VBox plant_chooser = (new PlantsMenu()).createScene();
         root.getChildren().add(plant_chooser);
         root.getChildren().add(this.displayScore());
-        
+
         root.setLeft(gameVBox);
 
         root.getChildren().add(this.createLawnMower());
         root.getChildren().add(this.placePeashooter());
         VBox zom=this.placeZombie();
         root.getChildren().add(zom);
-        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
+        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>()
+                    {
                         @Override
                         public void handle(ActionEvent event) {
                             root.getChildren().add(createSun());
@@ -78,39 +80,50 @@ public class Game extends Scenes
         oneSecondsWonder.play();
         return scene;
     }
+
     public HBox displayScore()
     {
+        Button redundant = new Button("whatever");
+        redundant.setDisable(true);
+        redundant.setVisible(false);
+
+        Image image_s = new Image("shovel.png");
+        ImageView view_image_s= new ImageView(image_s);
+        view_image_s.setFitHeight(75);
+        view_image_s.setFitWidth(75);
+
         HBox scoreboard=new HBox();
         scoreboard.setSpacing(40);
         scoreboard.setMaxWidth(900.0);
         scoreboard.setMaxHeight(500.0);
         Image image = new Image("sun.png");
         ImageView view_image= new ImageView(image);
-         Button l_score=new Button(Integer.toString(score));
+      
+        this.score=125;
+        Button l_score=new Button(Integer.toString(this.score));
         l_score.setFont(Font.font("Serif", FontWeight.EXTRA_BOLD, 30));
-        
-        l_score.setStyle("-fx-background-radius: 4em;");
-        
+        l_score.setStyle("-fx-background-radius: 4em;" + "-fx-background-color: #99ffcc;");
+        l_score.setMinWidth(125);
         l_score.setTranslateY(10);
         l_score.setTranslateX(-50);
-        
-        
-        
-         Button b_progress=new Button("Progress = "+this.progress);
+
+        this.progress=54;
+        Button b_progress=new Button("Progress = "+this.progress+"%");
         b_progress.setFont(Font.font("Serif", FontWeight.BOLD, 15));
+        b_progress.setStyle("-fx-text-fill: #0000ff; -fx-background-color: #99ffcc;");
         b_progress.setMinWidth(200);
         b_progress.setTranslateY(20);
         b_progress.setTranslateX(-50);
-        
-        
+
+        scoreboard.getChildren().add(view_image_s);
         scoreboard.getChildren().add(view_image);
-        
         scoreboard.getChildren().add(l_score);
         scoreboard.getChildren().add(b_progress);
-        scoreboard.setTranslateX(450);
+        scoreboard.setTranslateX(400);
         scoreboard.setTranslateY(-10);
         return scoreboard;
     }
+
     public VBox placeZombie()
     {
         VBox zombie = new VBox(50);

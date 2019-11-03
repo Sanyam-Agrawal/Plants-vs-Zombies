@@ -49,14 +49,13 @@ public class Game extends Scenes
 
         root.getChildren().add(this.createLawnMower());
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
-
-    @Override
-    public void handle(ActionEvent event) {
-        root.getChildren().add(createSun());
-    }
-}));
-fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
-fiveSecondsWonder.play();
+            @Override
+            public void handle(ActionEvent event) {
+                root.getChildren().add(createSun());
+            }
+        }));
+        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+        fiveSecondsWonder.play();
 
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(Game.class.getResource("game.css").toExternalForm());

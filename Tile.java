@@ -1,16 +1,13 @@
- 
 import javafx.event.EventHandler;
-
 import java.util.ArrayList;
-
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-public class Tile extends Rectangle{
-//fields ==================================================================================================================================
+public class Tile extends Rectangle
+{
 	private Game game;
 	private int row;
 	private int col;
@@ -20,7 +17,6 @@ public class Tile extends Rectangle{
 	private Plants occupyingPlant = null;
 	private boolean plantIsOccupying = false;
 
-//constructors ==================================================================================================================================
 	public Tile(Game game, int row, int col){
 		super(100.0, 100.0);
 		this.game = game;
@@ -67,7 +63,7 @@ public class Tile extends Rectangle{
 		this.width = width;
 		this.height = height;
 	}
-//public getters and setters ============================================================================================================================
+
 	// public Game getGame(){return this.game;}
 	// public int getRow(){return this.row;}
 	// public int getCol(){return this.col;}
@@ -82,24 +78,10 @@ public class Tile extends Rectangle{
 	// public void setStudentIsOccupying(boolean newStudentIsOccupying){this.studentIsOccupying = newStudentIsOccupying;}
 	// public void setExpelHammerIsSelected(boolean newExpelHammerIsSelected){this.expelHammerIsSelected = newExpelHammerIsSelected;}
 
-//public methods ==================================================================================================================================
-	/**
-	 * Sets the background image of this tile.
-	 *
-     * @param String The url source of the image.
-     * @return Nothing.
-     */
 	public void setImage(String url){
 		this.setFill(new ImagePattern(new Image(url)));
 	}
 
-	/**
-	 * Sets up a left tile by applying a MouseEvent onto it.
-	 * This MouseEvent changes the color of the selected Student.
-	 *
-     * @param Nothing.
-     * @return Nothing.
-     */
 	public void setUpLeftTile(){
 		Tile thisTile = this;
 		this.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -114,15 +96,6 @@ public class Tile extends Rectangle{
 		});
 	}
 
-	/**
-	 * Sets up a center tile.
-	 * Applies an onMouseEntered MouseEvent which changes the Tile's color to light gray or collects brain power from a StudyingStudent.
-	 * Applies an onMouseExited MouseEvent which changes the Tile's color back to gray.
-	 * Applies an onMousePressed MouseEvent which deletes the Student occupying the Tile as long as the expel hammer has been selected.
-	 *
-     * @param Nothing.
-     * @return Nothing.
-     */
 	public void setUpCenterTile(){
 		this.setOpacity(0.90);
 		// this.setStrokeWidth(2.0);
@@ -164,13 +137,5 @@ public class Tile extends Rectangle{
 				// }
 			}
 		});
-	}
-
-//private methods ==================================================================================================================================
-
-
-//main method ==================================================================================================================================
-	public static void main(String[] args){
-
 	}
 }

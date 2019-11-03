@@ -1,33 +1,34 @@
-
-/**
- * Write a description of class Plants here.
- *
- * @author (your name)
- * @version (a version number or a date)
- */
-public class Plants
+public abstract class Plants extends Creature
 {
-    // instance variables - replace the example below with your own
-    private int x;
+    private int cost;
+    private Tile tile = null;
 
-    /**
-     * Constructor for objects of class Plants
-     */
-    public Plants()
-    {
-        // initialise instance variables
-        x = 0;
+    public Plants(String imgSrc, int cost){
+        super(game, imgSrc);
+        this.cost = cost;
     }
 
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    public int getCost(){
+        return this.cost;
     }
+
+    public Tile getTile(){
+        return this.tile;
+    }
+
+    public void setCost(int newCost){
+        this.cost = newCost;
+    }
+
+    public void setTile(Tile newTile){
+        this.tile = newTile;
+    }
+
+    // @Override
+    // public void die(){
+    //     this.getGame().getInstantiatedPlants().remove(this);
+    //     this.tile.setOccupyingPlant(null);
+    //     this.tile.setPlantIsOccupying(false);
+    //     this.tile.setFill(Color.GRAY);
+    // }
 }

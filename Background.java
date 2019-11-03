@@ -49,8 +49,4 @@ public class Background extends Scenes
         scene.getStylesheets().add(Background.class.getResource("background.css").toExternalForm());
         return scene;
     }
-
-    public static void main(String[] args){
-
-    }
 }

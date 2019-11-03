@@ -11,28 +11,24 @@ import javafx.geometry.*;
 
 public class PlantsMenu
 {
-    public static VBox createScene()
+    public VBox createScene()
     {
         VBox menu = new VBox(50);
-        menu.setSpacing(40);
-        menu.setMaxWidth(250.0);
-        menu.setMaxHeight(400.0);
-        Image image = new Image("menu.png");
-        ImageView view_image= new ImageView(image);
-        // view_image.setFitHeight(70);
-        // view_image.setFitWidth(70);
+        menu.setSpacing(0);
+        menu.setMaxWidth(100);
+        menu.setMaxHeight(75);
 
-        menu.getChildren().add(view_image);
+        String[] resources_paths = {"card_sunflower.png", "card_peashooter.png", "card_freezepeashooter.png",
+                                    "card_wallnut.png", "card_cherrybomb.png"};
 
-        Button go = new Button("");
-        go.setStyle("-fx-background-radius: 4em; " +"-fx-min-width: 3px; " +"-fx-min-height: 3px; " +"-fx-max-width: 3px; " +"-fx-max-height: 3px;");
-        go.setTranslateX(480);
-        go.setTranslateY(180);
-
-        Image image = new Image(getClass().getResourceAsStream("go.jpg"));
-        ImageView imageView=new ImageView(image);
-        imageView.setFitHeight(130);
-        imageView.setFitWidth(140);
+        for (String s: resources_paths)
+        { 
+            Image image = new Image(getClass().getResourceAsStream(s));
+            ImageView imageView=new ImageView(image);
+            imageView.setFitHeight(100);
+            imageView.setFitWidth(75);
+            menu.getChildren().add(imageView);
+        }
 
         return menu;
     }

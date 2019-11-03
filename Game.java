@@ -44,6 +44,9 @@ public class Game extends Scenes
         game_menu.setOnAction(game_menu_event);
         gameVBox.getChildren().add(game_menu);
 
+        VBox plant_chooser = (new PlantsMenu()).createScene();
+        root.getChildren().add(plant_chooser);
+        
         root.setLeft(gameVBox);
         root.setCenter(this.createCenterTiles());
 

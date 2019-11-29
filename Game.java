@@ -218,8 +218,8 @@ public class Game
     {
         VBox menu = new VBox(50);
         menu.setSpacing(0);
-        menu.setMaxWidth(100);
-        menu.setMaxHeight(75);
+        menu.setMaxWidth(180);
+        menu.setMaxHeight(70);
 
         String[] resources_paths = {"card_sunflower.png", "card_peashooter.png", "card_freezepeashooter.png",
                 "card_wallnut.png", "card_cherrybomb.png"};
@@ -229,7 +229,7 @@ public class Game
             Image image = new Image(getClass().getResourceAsStream(s));
             ImageView imageView=new ImageView(image);
             imageView.setFitHeight(100);
-            imageView.setFitWidth(75);
+            imageView.setFitWidth(120);
             menu.getChildren().add(imageView);
         }
 

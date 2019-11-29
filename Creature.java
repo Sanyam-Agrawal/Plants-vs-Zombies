@@ -16,7 +16,7 @@ public abstract class Creature extends GridObject
     private String imgSrc;
     private Image img;
 
-    private int health, 
+    private int health;
 
     public Creature(String imgSrc){
         this.imgSrc = imgSrc;

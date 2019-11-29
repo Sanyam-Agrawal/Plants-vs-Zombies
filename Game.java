@@ -31,6 +31,8 @@ public class Game
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
 
+    public boolean isPaused = false;
+
     public Game(App app,Stage stage,String name)
     {
         this.myapp=app;
@@ -60,7 +62,7 @@ public class Game
         EventHandler<ActionEvent> game_menu_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 
-                { 
+                {
                     stage.setScene(myapp.getGameMenuScene());
                 } 
             };
@@ -70,8 +72,6 @@ public class Game
         root.getChildren().add(this.displayScore());
 
         root.setLeft(gameVBox);
-
-        ///////////////////////////////////////////////////////////////////////////////////////
 
         long[] plantAvailable = new long[5];
         long start_time = System.nanoTime();
@@ -84,6 +84,8 @@ public class Game
                         @Override
                         public void handle(ActionEvent event)
                         {
+                        	if (isPaused) return;
+
                             long curr_time = System.nanoTime();
 
                             for (int i=0; i<5; ++i)
@@ -120,12 +122,12 @@ public class Game
         }
 
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>()
-                    {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            root.getChildren().add(createSun());
-                        }
-                    }));
+        {
+            @Override
+            public void handle(ActionEvent event) {
+                if (!isPaused) root.getChildren().add(createSun());
+            }
+        }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
 
@@ -143,10 +145,13 @@ public class Game
         root.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
+
+                    if (isPaused) return;
+
                     mouseX = event.getSceneX();
                     mouseY = event.getSceneY();
 
-                    System.out.println(mouseX + "+" + mouseY);
+                    // System.out.println(mouseX + "+" + mouseY);
 
                     if (plantSelected.get(0)==-1)
                     {
@@ -156,7 +161,7 @@ public class Game
                             int which_plant = (int)(mouseY/100);
                             if ((curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant])
                             {
-                                plantAvailable[which_plant] = System.nanoTime();
+                                plantAvailable[which_plant] = curr_time;
                                 plantSelected.set(0,which_plant);
                                 scene.setCursor(new ImageCursor(plantmenuimages.get(which_plant)));
                             }

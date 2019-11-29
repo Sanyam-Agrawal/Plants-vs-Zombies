@@ -6,8 +6,7 @@
 
 //add click event to plants to remove using shovel
 
-// final double HOUSE_LAST_LINE = 250;
-// final double RIGHTMOST_LINE  = 1100;
+// pause ke time selected plant
 
 // void main_func()
 // {

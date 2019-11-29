@@ -92,6 +92,7 @@ public class GameMenu
 
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(MainMenu.class.getResource("game_menu.css").toExternalForm());
+
         return scene;
     }
 }

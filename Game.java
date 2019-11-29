@@ -208,6 +208,8 @@ public class Game
         VBox plant_chooser = createPlantMenu();
         root.getChildren().add(plant_chooser);
 
+
+
         return scene;
     }
 
@@ -390,45 +392,6 @@ public class Game
         scoreboard.setTranslateX(400);
         scoreboard.setTranslateY(-10);
         return scoreboard;
-    }
-
-    public VBox placeZombie()
-    {
-        VBox zombie = new VBox(50);
-        zombie.setSpacing(40);
-        zombie.setMaxWidth(250.0);
-        zombie.setMaxHeight(100.0);
-        Creature zom=new Zombies();
-        Image image = zom.getImg();
-        ImageView view_image= new ImageView(image);
-
-        zombie.getChildren().add(view_image);
-        TranslateTransition move_zombie =new TranslateTransition();
-        move_zombie.setDuration(Duration.millis(5000)); 
-        move_zombie.setNode(view_image); 
-        move_zombie.setByX(-150);
-        move_zombie.setCycleCount(1); 
-
-        zombie.setTranslateX(300);
-        zombie.setTranslateY(200);
-        move_zombie.play();
-        return zombie;
-    }
-
-    public VBox placePlant(Plants plant, double x, double y)
-    {
-        System.out.println("Placing at" + x + " " + y);
-        VBox v_plant = new VBox(50);
-        v_plant.setSpacing(40);
-        v_plant.setMaxWidth(250.0);
-        v_plant.setMaxHeight(100.0);
-        Image image = plant.getImg();
-        ImageView view_image = new ImageView(image);
-
-        v_plant.getChildren().add(view_image);
-        v_plant.setTranslateX(x);
-        v_plant.setTranslateY(y);
-        return v_plant;
     }
 
     public VBox createSun()

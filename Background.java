@@ -9,14 +9,18 @@ import javafx.scene.text.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
 
-public class Background extends Scenes
+public class Background 
 {
-    public Background(App app,Stage st)
+    public Stage stage;
+    public App myapp;
+
+    public Background(App app,Stage stage)
     {
-        super(app,st);
+        this.myapp=app;
+        this.stage=stage;
     }
 
-    @Override
+    
     public Scene createScene(){
         GridPane grid=new GridPane();
         grid.setAlignment(Pos.CENTER);

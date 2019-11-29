@@ -11,14 +11,18 @@ import javafx.geometry.*;
 import javafx.scene.control.Alert.*;
 import javafx.application.*;
 
-public class MainMenu extends Scenes 
+public class MainMenu 
 {
+    public Stage stage;
+    public App myapp;
+    
     public MainMenu(App app,Stage stage)
     {
-        super(app,stage);
+        this.myapp=app;
+        this.stage=stage;
     }
 
-    @Override
+    
     public Scene createScene(){
 
         BorderPane root = new BorderPane();
@@ -32,7 +36,8 @@ public class MainMenu extends Scenes
             { 
                 public void handle(ActionEvent e) 
                 { 
-                    stage.setScene(myapp.getGameScene());
+                    // stage.setScene(myapp.getGameScene());
+                    stage.setScene(myapp.getNameMenuScene());
                 } 
             };
         Alert a = new Alert(AlertType.INFORMATION); 

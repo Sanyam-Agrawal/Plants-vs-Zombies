@@ -14,9 +14,13 @@ import javafx.application.*;
 
 public class App extends Application
 {
-    private Scenes main_menu, background, game, game_menu;
+    private MainMenu main_menu;
+    private Background background;
+    private Game game;
+    private GameMenu game_menu;
+    private NameMenu name_menu;
     
-    private Scene background_scene, main_menu_scene, game_scene, game_menu_scene;
+    private Scene background_scene, main_menu_scene, game_scene, game_menu_scene,name_menu_scene;
     
     public App()
     {
@@ -27,28 +31,44 @@ public class App extends Application
     {
         this.main_menu=new MainMenu(this,stage);
         this.background=new Background(this,stage);
-        this.game=new Game(this,stage);
         this.game_menu=new GameMenu(this,stage);
+        this.name_menu=new NameMenu(this,stage);
 
         this.main_menu_scene=main_menu.createScene();
         this.background_scene=background.createScene();
-        this.game_menu_scene=game_menu.createScene();
+        this.name_menu_scene=name_menu.createScene();
     }
 
     public Scene getMainMenuScene()
     {
         return main_menu_scene;
     }
+    
+    public Scene getNameMenuScene()
+    {
+        return name_menu_scene;
+    }
 
     public Scene getBackgroundScene()
     {
         return background_scene;
     }
-
     public Scene getGameScene()
     {
-        if(game_scene==null) game_scene = this.game.createScene();
         return game_scene;
+    }
+
+    public Game getGame()
+    {
+        return this.game;
+    }
+    public void createGame(String name,Stage stage)
+    {
+        if(this.game==null)
+        {
+            this.game=new Game(this,stage,name);
+            this.game_scene = this.game.createScene();
+        }
     }
 
     public Scene getGameMenuScene()

@@ -16,6 +16,7 @@ class LawnMower extends GridObject
 	LawnMower ()
 	{
 		super(10,0);
+		this.vBox = this.createVBox();
 	}
 
 	protected VBox createVBox()
@@ -26,6 +27,7 @@ class LawnMower extends GridObject
 		view_image.setFitHeight(70);
 		view_image.setFitWidth(70);
 		mower.getChildren().add(view_image);
+		mower.setTranslateX(180);
 		return mower;
 	}
 }

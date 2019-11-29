@@ -22,6 +22,7 @@ public abstract class Creature extends GridObject
         super(10,0);
         this.imgSrc = imgSrc;
         this.img = new Image(this.imgSrc);
+        this.vBox = this.createVBox();
     }
 
     protected VBox createVBox()

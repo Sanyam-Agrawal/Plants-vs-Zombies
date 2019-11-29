@@ -17,11 +17,10 @@ abstract class GridObject implements Serializable
 {
 	private double xdelta, ydelta;
 
-	private VBox vBox;
+	protected VBox vBox;
 
 	GridObject (double i1, double i2)
 	{
-		vBox = this.createVBox();
 		xdelta = i1;
 		ydelta = i2;
 	}

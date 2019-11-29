@@ -11,15 +11,19 @@ import javafx.geometry.*;
 import javafx.animation.*; 
 import javafx.util.Duration;
 
-public abstract class Creature
+public abstract class Creature extends GridObject
 {
     private String imgSrc;
     private Image img;
+
+    private int health, 
 
     public Creature(String imgSrc){
         this.imgSrc = imgSrc;
         this.img = new Image(this.imgSrc);
     }
+
+    public void decreaseHealth (int delta) { this.health -= delta; }
 
     public Image getImg(){
         return this.img;

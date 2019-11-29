@@ -29,7 +29,7 @@ void main_func()
 
 void handlePlants(Row row)
 {
-	Set<GridObjects> plants = row.getPlants();
+	Set<Plants> plants = row.getPlants();
 
 	for (Iterator<Plants> i = plants.iterator(); i.hasNext(); )
 	{
@@ -45,12 +45,12 @@ void handlePlants(Row row)
 
 void handlePeas(Row row)
 {
-	Set<GridObjects> peas = row.getPeas();
+	Set<Peas> peas = row.getPeas();
 	boolean stillThere = false;
 
 	for (Iterator<Peas> i = peas.iterator(); i.hasNext(); )
 	{
-		Plant pea = i.next();
+		Peas pea = i.next();
 
 		for (Zombies zombie : row.getZombies())
 		{
@@ -102,7 +102,7 @@ void handleLawnMowers(Row row)
 
 void handleZombies(Row row)
 {
-	Set<GridObjects> zombies = row.getZombies();
+	Set<Zombies> zombies = row.getZombies();
 
 	for (Iterator<Zombies> i = zombies.iterator(); i.hasNext(); )
 	{

@@ -19,10 +19,23 @@ public abstract class Creature extends GridObject
     private int health;
 
     public Creature(String imgSrc){
+        super(10,0);
         this.imgSrc = imgSrc;
         this.img = new Image(this.imgSrc);
     }
 
+    protected VBox createVBox()
+    {
+        VBox created = new VBox(50);
+        created.setSpacing(40);
+        created.setMaxWidth(250.0);
+        created.setMaxHeight(100.0);
+        ImageView view_image= new ImageView(this.img);
+        created.getChildren().add(view_image);
+        return created;
+    }
+
+    public int getHealth() { return this.health; }
     public void decreaseHealth (int delta) { this.health -= delta; }
 
     public Image getImg(){

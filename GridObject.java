@@ -11,20 +11,25 @@ import javafx.geometry.*;
 import javafx.animation.*; 
 import javafx.util.Duration;
 
-class GridObject implements Serializable
+import java.io.*;
+
+abstract class GridObject implements Serializable
 {
 	private double xdelta, ydelta;
 
 	private VBox vBox;
 
-	GridObject (VBox _vBox, double i1, double i2)
+	GridObject (double i1, double i2)
 	{
-		vBox = _vBox;
+		vBox = this.createVBox();
 		xdelta = i1;
 		ydelta = i2;
 	}
 
+	protected abstract VBox createVBox();
+
 	public VBox getVBox() { return this.vBox; }
+	public void setVBox (VBox _VBox) { this.vBox = _VBox; }
 
 	public double getXdelta() { return this.xdelta; }
 	public double getYdelta() { return this.ydelta; }

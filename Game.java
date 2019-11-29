@@ -1,4 +1,3 @@
-
 import javafx.stage.*;
 import javafx.event.*;
 import javafx.scene.image.*;
@@ -17,12 +16,7 @@ import java.util.*;
 public class Game extends Scenes
 {
 	private BorderPane root;
-
 	private double mouseX, mouseY;
-
-	private Pane[] centerRows = new Pane[5];
-	Pane Lawn_Mower[] = new Pane[5];
-	TranslateTransition move_mower[] = new TranslateTransition[5];
 	int score=0,progress=0;
 
 	public Game(App app,Stage st)
@@ -55,7 +49,17 @@ public class Game extends Scenes
 
 		root.setLeft(gameVBox);
 
-		root.getChildren().add(this.createLawnMower());
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		ArrayList<Row> rows = new ArrayList<>();
+		for (int i=0; i<5; ++i)
+		{
+			rows.add( new Row(95 + i*100) );
+			VBox mower = rows.get(i).getLawnMower().getVBox();
+			root.getChildren().add(mower);
+			mower.setTranslateX(180);
+			mower.setTranslateY(rows.get(i).getMiddle());
+		}
 
 		Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>()
 					{
@@ -81,9 +85,6 @@ public class Game extends Scenes
 
 		VBox plant_chooser = createPlantMenu();
 		root.getChildren().add(plant_chooser);
-
-		move_mower[2].setCycleCount(1);
-		move_mower[2].play();
 
 		return scene;
 	}
@@ -154,22 +155,6 @@ public class Game extends Scenes
 		return zombie;
 	}
 
-	public VBox placePeashooter()
-	{
-		VBox v_plant = new VBox(50);
-		v_plant.setSpacing(40);
-		v_plant.setMaxWidth(250.0);
-		v_plant.setMaxHeight(100.0);
-		Creature plant=new PeaShooter();
-		Image image = plant.getImg();
-		ImageView view_image= new ImageView(image);
-
-		v_plant.getChildren().add(view_image);
-		v_plant.setTranslateX(280);
-		v_plant.setTranslateY(90);
-		return v_plant;
-	}
-
 	public VBox placePlant(Plants plant, double x, double y)
 	{
 		System.out.println("Placing at" + x + " " + y);
@@ -184,32 +169,6 @@ public class Game extends Scenes
 		v_plant.setTranslateX(x);
 		v_plant.setTranslateY(y);
 		return v_plant;
-	}
-
-	public VBox createLawnMower()
-	{
-		VBox mower = new VBox(50);
-		mower.setSpacing(40);
-		mower.setMaxWidth(250.0);
-		mower.setMaxHeight(400.0);
-		for(int i=0;i<5;i++)
-		{
-			Image image = new Image("lawn_mower.gif");
-			ImageView view_image= new ImageView(image);
-			view_image.setFitHeight(70);
-			view_image.setFitWidth(70);
-
-			mower.getChildren().add(view_image);
-			move_mower[i]=new TranslateTransition();
-			move_mower[i].setDuration(Duration.millis(3000)); 
-			move_mower[i].setNode(view_image); 
-			move_mower[i].setByX(950); 
-			move_mower[i].setCycleCount(1); 
-			move_mower[i].setAutoReverse(false); 
-		}
-		mower.setTranslateX(170);
-		mower.setTranslateY(60);
-		return mower;
 	}
 
 	public VBox createSun()
@@ -246,52 +205,14 @@ public class Game extends Scenes
 		String[] resources_paths = {"card_sunflower.png", "card_peashooter.png", "card_freezepeashooter.png",
 									"card_wallnut.png", "card_cherrybomb.png"};
 
-		// DataFormat[] dataformats_resources = { new DataFormat("sunflower"), new DataFormat("peashooter"),
-		// 									   new DataFormat("freezepeashooter"),
-		// 									   new DataFormat("wallnut"), new DataFormat("cherrybomb") };
-
-		// int plantNo = -1;
-		// int i = 0;
 		for (String s: resources_paths)
 		{ 
 			Image image = new Image(getClass().getResourceAsStream(s));
 			ImageView imageView=new ImageView(image);
 			imageView.setFitHeight(100);
 			imageView.setFitWidth(75);
-			// DataFormat d = dataformats_resources[i];
-			// imageView.setOnDragDetected(e -> {
-			// 	Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
-			// 	db.setDragView(imageView.snapshot(null, null)); 
-			// 	ClipboardContent cc = new ClipboardContent();
-			// 	cc.put(d, " ");
-			// 	db.setContent(cc);
-			// 	System.out.println("drag start");
-			// 	});
 			menu.getChildren().add(imageView);
-			// ++i;
 		}
-		// root.setOnDragOver(e -> {
-		// 	Dragboard db = e.getDragboard();
-		// 	boolean flag = false;
-		// 	for (DataFormat d : dataformats_resources) if (db.hasContent(d)) flag = true;
-		// 	if (flag)
-		// 		 e.acceptTransferModes(TransferMode.MOVE);
-		// 	System.out.println("drag over");
-		// });
-
-		// root.setOnDragDropped(e -> {
-		// 	System.out.println("drag drop start");
-		// 	Dragboard db = e.getDragboard();
-		// 	boolean flag = false;
-		// 	for (DataFormat d : dataformats_resources) if (db.hasContent(d)) flag = true;
-		// 	if (flag) {
-		// 		// ((Pane)draggingB.get(0).getParent()).getChildren().remove(draggingB.get(0));
-		// 		//add plant at that point
-		// 		placePlant(new SunFlower(),mouseX,mouseY);
-		// 		e.setDropCompleted(true);
-		// 	}
-		// 	if (plantNo != -1) System.out.println("drag drop end");
-		// });
 
 		return menu;
 	}

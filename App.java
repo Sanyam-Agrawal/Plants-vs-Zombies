@@ -55,6 +55,8 @@ public class App extends Application
     }
     public Scene getGameScene()
     {
+        if(game_scene==null)
+        this.game_scene = this.game.createScene();
         return game_scene;
     }
 
@@ -67,12 +69,13 @@ public class App extends Application
         if(this.game==null)
         {
             this.game=new Game(this,stage,name);
-            this.game_scene = this.game.createScene();
+            // this.game_scene = this.game.createScene();
         }
     }
 
     public Scene getGameMenuScene()
     {
+        
         return game_menu_scene;
     }
 

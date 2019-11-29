@@ -85,7 +85,7 @@ public class Game
                         public void handle(ActionEvent event)
                         {
                             long curr_time = System.nanoTime();
-                            
+
                             for (int i=0; i<5; ++i)
                             {
                                 if ((curr_time-plantAvailable[i]) < timeNeeded[i])
@@ -93,7 +93,7 @@ public class Game
                                 else
                                     plantmenuimageviews.get(i).setImage(plantmenuimages.get(i));
                             }
-                            
+
                             l_score.setText(""+score);
                             // for (Row row : allRows)
                             // {
@@ -175,9 +175,9 @@ public class Game
                                 {
                                     case 0: plant = new SunFlower(); break;
                                     case 1: plant = new PeaShooter(); break;
-                                    case 2: /*plant = new FreezePeaShooter();*/ break;
-                                    case 3: /*plant = new Wallnut();*/ break;
-                                    case 4: /*plant = new CherryBomb();*/ break;
+                                    case 2: plant = new FreezePeaShooter(); break;
+                                    case 3: plant = new Wallnut(); break;
+                                    case 4: plant = new CherryBomb(); break;
                                 }
 
                                 if (plant==null) return;
@@ -343,6 +343,26 @@ public class Game
             }
         );
         return sun;
+    }
+
+    public void produceSun(int x,int y)
+    {
+        VBox sun = new VBox(50);
+        sun.setSpacing(40);
+        sun.setMaxWidth(250.0);
+        sun.setMaxHeight(400.0);
+        Image image = new Image("sun.png");
+        ImageView view_image= new ImageView(image);
+        sun.getChildren().add(view_image);
+        sun.setOnMouseClicked(event -> 
+            {
+                score+=25;    
+                sun.getChildren().clear();
+            }
+        );
+        sun.setTranslateX(x);
+        sun.setTranslateY(y);
+        root.getChildren().add(sun);
     }
 
     private VBox createPlantMenu()

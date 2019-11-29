@@ -1,6 +1,7 @@
 public class CherryBomb extends Plants
 {
-    public CherryBomb(){
+    public CherryBomb()
+    {
         super("",100);
     }
 }

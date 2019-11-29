@@ -13,14 +13,21 @@ import javafx.util.Duration;
 
 class Peas extends GridObject
 {
-	Peas()
+	private boolean isIced;
+
+	Peas(boolean ice)
 	{
 		super(10,0);
+		this.isIced = ice;
 	}
+
+	public boolean isFreezing() { return this.isIced; }
 
 	protected VBox createVBox()
 	{
 		//TODO
 		return null;
 	}
+
+	public int getAttack() { return 10; }
 }

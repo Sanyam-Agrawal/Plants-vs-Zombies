@@ -16,10 +16,10 @@ public abstract class Creature extends GridObject
     private String imgSrc;
     private Image img;
 
-    private int health;
+    protected int health;
 
     public Creature(String imgSrc){
-        super(10,0);
+        super(-10,0);
         this.imgSrc = imgSrc;
         this.img = new Image(this.imgSrc);
         this.vBox = this.createVBox();

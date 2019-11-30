@@ -25,7 +25,7 @@ public class Game
     private ArrayList<Image> plantmenuimages = new ArrayList<>();
     private ArrayList<Image> plantmenublurredimages = new ArrayList<>();
     private TranslateTransition move_sun;
-
+    private Player player;
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
 
@@ -36,13 +36,14 @@ public class Game
 
     }
 
-    public Game(App app,Stage stage)
+    public Game(App app,Stage stage,Player player)
     {
         this.myapp=app;
         this.stage=stage;
+        this.player=player;
     }
-
-    public Scene createScene()
+    
+    public Scene createScene(Player player,int level)
     {
         root = new BorderPane();
         VBox gameVBox = new VBox(10.0);

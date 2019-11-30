@@ -39,8 +39,8 @@ public class GameMenu
                 public void handle(ActionEvent e) 
                 { 
                     myapp.click();
-                    stage.setScene(myapp.getPlayer().getGameScene());
-                    myapp.getPlayer().getGame().isPaused = false;
+                    stage.setScene(myapp.getGameScene());
+                    myapp.getGame().isPaused = false;
                 } 
             }; 
         resume_game.setOnAction(resume_game_event);

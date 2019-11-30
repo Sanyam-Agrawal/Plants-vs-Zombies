@@ -22,8 +22,8 @@ public class App extends Application
     private GameMenu game_menu;
     private NameMenu name_menu;
     Media sound = new Media(new File("buttonclick.mp3").toURI().toString());
-    private Scene background_scene, main_menu_scene, game_menu_scene,name_menu_scene;
-
+    private Scene background_scene, main_menu_scene, game_menu_scene,name_menu_scene,game_scene;
+    private Game game;
     public App()
     {
 
@@ -40,13 +40,32 @@ public class App extends Application
         this.background_scene=background.createScene();
         this.game_menu_scene=game_menu.createScene();
     }
+
     public void click()
     {
         (new MediaPlayer(sound)).play();
     }
+
+    public Game getGame()
+    {
+        return game;   
+    }
+
     public Scene getMainMenuScene()
     {
         return main_menu_scene;
+    }
+
+    public Scene createGameScene(Stage stage,int level)
+    {
+        game=new Game(this,stage,player);
+        this.game_scene = this.game.createScene(player,level);
+        return game_scene;
+    }
+
+    public Scene getGameScene()
+    {
+        return game_scene;   
     }
 
     public Scene getNameMenuScene(boolean is_new)

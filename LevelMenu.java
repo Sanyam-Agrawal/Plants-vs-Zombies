@@ -16,6 +16,8 @@ public class LevelMenu
     public Stage stage;
     public App myapp;
     Button level_buttons[];
+
+    int i;
     public LevelMenu(App app,Stage stage)
     {
         this.myapp=app;
@@ -29,7 +31,7 @@ public class LevelMenu
         boolean available_levels[]=myapp.getPlayer().getAvailabelLevels();
         level_buttons=new Button[6];
         menuVBox.setAlignment(Pos.CENTER);
-        for(int i=1;i<6;i++)
+        for(i=1;i<6;i++)
         {
             level_buttons[i] = new Button("Level "+i);
             level_buttons[i].setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
@@ -42,7 +44,7 @@ public class LevelMenu
                         public void handle(ActionEvent e) 
                         { 
                             myapp.click();
-                            stage.setScene(myapp.getPlayer().getGameScene());
+                            stage.setScene(myapp.createGameScene(stage,i));
                         } 
                     };
                 level_buttons[i].setOnAction(level_button_event);

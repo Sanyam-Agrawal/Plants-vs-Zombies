@@ -10,7 +10,8 @@ import javafx.scene.layout.*;
 import javafx.geometry.*;
 import javafx.animation.*; 
 import javafx.util.Duration;
-
+import javafx.scene.media.*;
+import java.io.*;
 import java.util.*;
 
 public class Game
@@ -27,7 +28,8 @@ public class Game
     private TranslateTransition move_sun;
     private Map<Timeline,ArrayList<Boolean>> allTimelines = new HashMap<>();
     private Player player;
-
+    
+    Media fire_pea_sound = new Media(new File("firepea.mp3").toURI().toString());
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
 
@@ -196,7 +198,7 @@ public class Game
 
                                 if (plant==null) return;
 
-                                score -= cost[which_plant];
+                                score -=cost[which_plant];
 
                                 VBox p = rows.get(row_no).addPlant(plant,column_no);
                                 p.setTranslateX(middle_point[column_no]-40);
@@ -214,6 +216,7 @@ public class Game
                                                         if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
                                                         VBox res = rows.get(row_no).addPea(column_no, flag);
                                                         if (res==null) return;
+                                                        (new MediaPlayer(fire_pea_sound)).play();
                                                         res.setTranslateX(middle_point[column_no]+2);
                                                         root.getChildren().add(res);
                                                     }

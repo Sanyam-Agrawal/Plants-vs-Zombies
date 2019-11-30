@@ -1,6 +1,5 @@
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import java.io.File;
+import javafx.scene.media.*;
+import java.io.*;
 import javafx.stage.*;
 import javafx.event.*;
 import javafx.scene.image.*;
@@ -21,7 +20,7 @@ public class App extends Application
     private Player player;
     private GameMenu game_menu;
     private NameMenu name_menu;
-    Media sound = new Media(new File("buttonclick.mp3").toURI().toString());
+    Media click_sound = new Media(new File("buttonclick.mp3").toURI().toString());
     private Scene background_scene, main_menu_scene, game_menu_scene,name_menu_scene,game_scene;
     private Game game;
     public App()
@@ -43,7 +42,7 @@ public class App extends Application
 
     public void click()
     {
-        (new MediaPlayer(sound)).play();
+        (new MediaPlayer(click_sound)).play();
     }
 
     public Game getGame()

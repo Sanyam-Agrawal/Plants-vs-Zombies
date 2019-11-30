@@ -27,6 +27,7 @@ public class Game
     private ArrayList<ImageView> plantmenuimageviews = new ArrayList<>();
     private ArrayList<Image> plantmenuimages = new ArrayList<>();
     private ArrayList<Image> plantmenublurredimages = new ArrayList<>();
+    private TranslateTransition move_sun;
 
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
@@ -63,6 +64,7 @@ public class Game
             { 
                 public void handle(ActionEvent e) 
                 {
+                    isPaused = true;
                     stage.setScene(myapp.getGameMenuScene());
                 } 
             };
@@ -83,7 +85,17 @@ public class Game
             mower.setTranslateX(180);
             mower.setTranslateY(rows.get(i).getMiddle());
         }
-
+        
+        Timeline sungen = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>()
+                    {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            root.getChildren().add(createSun());
+                        }
+                    }));
+        sungen.setCycleCount(Timeline.INDEFINITE);
+        sungen.play();
+        
         long[] plantAvailable = new long[5];
         long start_time = System.nanoTime();
         for (int i=0; i<5; ++i) plantAvailable[i] = start_time;
@@ -95,8 +107,16 @@ public class Game
                         @Override
                         public void handle(ActionEvent event)
                         {
-                            if (isPaused) return;
-
+                            if (isPaused)
+                            {
+                                sungen.pause();
+                                if(move_sun!=null) move_sun.pause();
+                                return;
+                            }
+  
+                            if(move_sun!=null) move_sun.play();
+                            sungen.play();
+                            
                             long curr_time = System.nanoTime();
 
                             for (int i=0; i<5; ++i)
@@ -121,16 +141,6 @@ public class Game
 
         mainTimer.setCycleCount(Timeline.INDEFINITE);
         mainTimer.play();
-
-        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>()
-                    {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            if (!isPaused) root.getChildren().add(createSun());
-                        }
-                    }));
-        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
-        fiveSecondsWonder.play();
 
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(Game.class.getResource("game.css").toExternalForm());
@@ -433,7 +443,7 @@ public class Game
         Image image = new Image("sun.png");
         ImageView view_image= new ImageView(image);
         sun.getChildren().add(view_image);
-        TranslateTransition move_sun =new TranslateTransition();
+        move_sun =new TranslateTransition();
         move_sun.setDuration(Duration.millis(12000)); 
         move_sun.setNode(view_image); 
 

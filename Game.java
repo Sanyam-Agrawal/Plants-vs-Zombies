@@ -185,10 +185,12 @@ public class Game
                         {
                             int row_no = find_row_no(mouseY);
                             int column_no = find_column_no(mouseX);
+                            int which_plant = plantSelected.get(0);
+
                             if (rows.get(row_no).isColumnOkay(column_no))
                             {
                                 Plants plant = null;
-                                switch(plantSelected.get(0))
+                                switch(which_plant)
                                 {
                                     case 0: plant = new SunFlower(); break;
                                     case 1: plant = new PeaShooter(); break;
@@ -199,16 +201,16 @@ public class Game
 
                                 if (plant==null) return;
 
-                                score -= cost[plantSelected.get(0)];
+                                score -= cost[which_plant];
 
                                 VBox p = rows.get(row_no).addPlant(plant,column_no);
                                 p.setTranslateX(middle_point[column_no]-40);
                                 root.getChildren().add(p);
                                 scene.setCursor(default_cursor);
 
-                                if(plantSelected.get(0)==1 || plantSelected.get(0)==2)
+                                if (which_plant==1 || which_plant==2)
                                 {
-                                    boolean flag = plantSelected.get(0)==2;
+                                    boolean flag = (which_plant==2);
                                     Timeline peagen = new Timeline(new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>()
                                                 {
                                                     @Override
@@ -222,6 +224,19 @@ public class Game
                                                 }));
                                     peagen.setCycleCount(Timeline.INDEFINITE);
                                     peagen.play();
+                                }
+                                else if (which_plant==0)
+                                {
+                                    Plants plan = plant;
+                                    Timeline sunfgen = new Timeline(new KeyFrame(Duration.millis(5000), new EventHandler<ActionEvent>() {
+                                                    @Override
+                                                    public void handle(ActionEvent event) {
+                                                        if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
+                                                        VBox psuned = produceSun(middle_point[column_no]-30,rows.get(row_no).getMiddle());
+                                                    }
+                                    }));
+                                    sunfgen.setCycleCount(Timeline.INDEFINITE);
+                                    sunfgen.play();
                                 }
 
                                 plantSelected.set(0,-1);
@@ -477,7 +492,7 @@ public class Game
         return sun;
     }
 
-    public void produceSun(int x,int y)
+    public VBox produceSun(int x,int y)
     {
         VBox sun = new VBox(50);
         sun.setSpacing(40);
@@ -495,6 +510,7 @@ public class Game
         sun.setTranslateX(x);
         sun.setTranslateY(y);
         root.getChildren().add(sun);
+        return sun;
     }
 
     private VBox createPlantMenu()

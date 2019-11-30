@@ -21,33 +21,29 @@ public class Game
     private Button l_score;
     public Stage stage;
     public App myapp;
-    private Player player;
-    private LevelMenu level_menu;
-    private Scene level_menu_scene;
+    // private Player player;
     private ArrayList<ImageView> plantmenuimageviews = new ArrayList<>();
     private ArrayList<Image> plantmenuimages = new ArrayList<>();
     private ArrayList<Image> plantmenublurredimages = new ArrayList<>();
     private TranslateTransition move_sun;
-
+    
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
 
     public boolean isPaused = false;
-
-    public Game(App app,Stage stage,String name)
+    
+    public Game()
+    {
+        
+    }
+    
+    public Game(App app,Stage stage)
     {
         this.myapp=app;
         this.stage=stage;
-        this.player=new Player(name,this);
-        this.level_menu=new LevelMenu(app,stage);
     }
 
-    public Scene getLevelMenuScene()
-    {
-        if(level_menu_scene==null)
-            this.level_menu_scene=level_menu.createScene();
-        return this.level_menu_scene;
-    }
+    
 
     public Scene createScene()
     {
@@ -388,11 +384,6 @@ public class Game
 
             if (move_flag) zombie.getVBox().setTranslateX(zombie.getVBox().getTranslateX() + zombie.getXdelta());
         }
-    }
-
-    public boolean[] getAvailabelLevels()
-    {
-        return player.getAvailabelLevels();
     }
 
     private int find_row_no (double y)

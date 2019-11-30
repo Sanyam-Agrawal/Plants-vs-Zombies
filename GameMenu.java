@@ -38,8 +38,8 @@ public class GameMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
-                    stage.setScene(myapp.getGameScene());
-                    myapp.getGame().isPaused = false;
+                    stage.setScene(myapp.getPlayer().getGameScene());
+                    myapp.getPlayer().getGame().isPaused = false;
                 } 
             }; 
         resume_game.setOnAction(resume_game_event);

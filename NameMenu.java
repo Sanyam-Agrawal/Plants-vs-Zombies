@@ -54,12 +54,15 @@ public class NameMenu
                     {
                         if(is_new)
                         {
-                            myapp.createGame(name.getText(),stage);
-                            stage.setScene(myapp.getGame().getLevelMenuScene());
+                            myapp.createPlayer(name.getText(),stage);
+                            stage.setScene(myapp.getPlayer().getLevelMenuScene());
                         }
                         else
                         {
-                            //try deserialize
+                            // deserialize player
+                            // assign myapp and stage variables of player class since transient
+                            // assign player varaible of App class
+                            // stage.setScene(myapp.getPlayer().getLevelMenuScene()); /*move it out of if-else to avoid repetion
                         }
                     }
                 } 

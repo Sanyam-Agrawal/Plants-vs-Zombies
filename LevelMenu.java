@@ -25,7 +25,8 @@ public class LevelMenu
     public Scene createScene(){
         BorderPane root = new BorderPane();
         VBox menuVBox = new VBox(10);
-        boolean available_levels[]=myapp.getGame().getAvailabelLevels();
+
+        boolean available_levels[]=myapp.getPlayer().getAvailabelLevels();
         level_buttons=new Button[6];
         menuVBox.setAlignment(Pos.CENTER);
         for(int i=1;i<6;i++)
@@ -35,7 +36,15 @@ public class LevelMenu
             level_buttons[i].setStyle("-fx-background-color: #BCEABE");
             if(available_levels[i])
             {
-                addEventHandler(i);
+                level_buttons[i].setStyle("-fx-background-color: #32CD32");
+                EventHandler<ActionEvent> level_button_event = new EventHandler<ActionEvent>() 
+                    { 
+                        public void handle(ActionEvent e) 
+                        { 
+                            stage.setScene(myapp.getPlayer().getGameScene());
+                        } 
+                    };
+                level_buttons[i].setOnAction(level_button_event);
             }
             menuVBox.getChildren().add(level_buttons[i]);
         }
@@ -60,22 +69,5 @@ public class LevelMenu
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(MainMenu.class.getResource("name_menu.css").toExternalForm());
         return scene;
-    }
-
-    public void addEventHandler(int i)
-    {
-
-        level_buttons[i].setStyle("-fx-background-color: #32CD32");
-        EventHandler<ActionEvent> level_button_event = new EventHandler<ActionEvent>() 
-            { 
-                public void handle(ActionEvent e) 
-                { 
-
-                    stage.setScene(myapp.getGameScene());
-
-                } 
-            };
-
-        level_buttons[i].setOnAction(level_button_event);
     }
 }

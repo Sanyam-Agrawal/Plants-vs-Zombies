@@ -16,15 +16,15 @@ public class App extends Application
 {
     private MainMenu main_menu;
     private Background background;
-    private Game game;
+    private Player player;
     private GameMenu game_menu;
     private NameMenu name_menu;
-    
-    private Scene background_scene, main_menu_scene, game_scene, game_menu_scene,name_menu_scene;
-    
+
+    private Scene background_scene, main_menu_scene, game_menu_scene,name_menu_scene;
+
     public App()
     {
-        
+
     }
 
     public App(Stage stage)
@@ -43,7 +43,7 @@ public class App extends Application
     {
         return main_menu_scene;
     }
-    
+
     public Scene getNameMenuScene(boolean is_new)
     {
         return this.name_menu_scene=name_menu.createScene(is_new);
@@ -53,23 +53,16 @@ public class App extends Application
     {
         return background_scene;
     }
-    public Scene getGameScene()
+
+    public Player createPlayer(String name,Stage stage)
     {
-        if(game_scene==null)
-        this.game_scene = this.game.createScene();
-        return game_scene;
+        player=new Player(name,this,stage);
+        return player;
     }
 
-    public Game getGame()
+    public Player getPlayer()
     {
-        return this.game;
-    }
-    public void createGame(String name,Stage stage)
-    {
-        if(this.game==null)
-        {
-            this.game=new Game(this,stage,name);
-        }
+        return player;    
     }
 
     public Scene getGameMenuScene()

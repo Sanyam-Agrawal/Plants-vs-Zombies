@@ -13,7 +13,7 @@ import javafx.util.Duration;
 
 import java.util.*;
 
-class Row
+class Row 
 {
 	private int middle_point;
 

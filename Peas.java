@@ -13,11 +13,13 @@ import javafx.util.Duration;
 
 class Peas extends GridObject
 {
+	private Row row;
     private boolean isIced;
 
-    Peas(boolean ice)
+    Peas(Row row, boolean ice)
     {
         super(2,0);
+        this.row = row;
         this.isIced = ice;
         this.vBox = this.createVBox();
     }
@@ -34,6 +36,8 @@ class Peas extends GridObject
         vbox.getChildren().add(imageView);
         return vbox;
     }
+
+    public boolean shouldShoot() { return !row.getZombies().isEmpty(); }
 
     public int getAttack() { return 10; }
 }

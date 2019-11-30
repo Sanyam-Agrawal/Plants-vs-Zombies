@@ -49,7 +49,8 @@ class Row
 
 	public VBox addPea (int column, boolean isFreeze)
 	{
-	    Peas pea = new Peas(isFreeze);
+	    Peas pea = new Peas(this,isFreeze);
+	    if (!pea.shouldShoot()) return null;
 	    this.peas.add(pea);
 	    VBox res = pea.getVBox();
 	    while ((res=pea.getVBox())==null);

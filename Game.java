@@ -195,12 +195,13 @@ public class Game
 
                                 if(plantSelected.get(0)==1 || plantSelected.get(0)==2)
                                 {
-                                    Timeline peagen = new Timeline(new KeyFrame(Duration.seconds(2), new EventHandler<ActionEvent>()
+                                    Timeline peagen = new Timeline(new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>()
                                                 {
                                                     @Override
                                                     public void handle(ActionEvent event) {
                                                         if (isPaused) return;
                                                         VBox res = rows.get(row_no).addPea(column_no, plantSelected.get(0)==2);
+                                                        if (res==null) return;
                                                         res.setTranslateX(middle_point[column_no]+2);
                                                         root.getChildren().add(res);
                                                     }
@@ -273,12 +274,6 @@ public class Game
 
             for (Zombies zombie : row.getZombies())
             {
-                if (pea.getVBox()==null)
-                {    
-                    System.out.println(pea.getVBox()==null);
-                    continue;
-                }
-
                 if ((zombie.getVBox().getTranslateX() - pea.getVBox().getTranslateX()) < 3)
                 {
                     zombie.decreaseHealth(pea.getAttack());
@@ -292,7 +287,8 @@ public class Game
                 }
             }
 
-            if (stillThere) pea.getVBox().setTranslateX(pea.getVBox().getTranslateX() + pea.getXdelta());
+            if (stillThere)
+                pea.getVBox().setTranslateX(pea.getVBox().getTranslateX() + pea.getXdelta());
         }
     }
 

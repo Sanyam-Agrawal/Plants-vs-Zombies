@@ -21,7 +21,6 @@ public class MainMenu
         this.myapp=app;
         this.stage=stage;
     }
-
     
     public Scene createScene(){
 
@@ -36,28 +35,11 @@ public class MainMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
-                    // stage.setScene(myapp.getGameScene());
-                    stage.setScene(myapp.getNameMenuScene());
+                    stage.setScene(myapp.getNameMenuScene(true));
                 } 
             };
-        Alert a = new Alert(AlertType.INFORMATION); 
-        a.setContentText("This feature is not yet implemented!!"); 
         start_game.setOnAction(start_game_event);
         menuVBox.getChildren().add(start_game);
-
-        Button choose_level = new Button("Choose Level");
-        choose_level.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
-        choose_level.setStyle("-fx-background-color: #32CD32");
-        choose_level.setTranslateX(-10);
-        EventHandler<ActionEvent> choose_level_event = new EventHandler<ActionEvent>() 
-            { 
-                public void handle(ActionEvent e) 
-                { 
-                    a.show(); 
-                } 
-            }; 
-        choose_level.setOnAction(choose_level_event); 
-        menuVBox.getChildren().add(choose_level);
 
         Button load_game = new Button("Load Game");
         load_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
@@ -67,9 +49,10 @@ public class MainMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
-                    a.show();
+                    stage.setScene(myapp.getNameMenuScene(false));
                 } 
             }; 
+            
         load_game.setOnAction(load_game_event); 
         menuVBox.getChildren().add(load_game);
 
@@ -88,7 +71,7 @@ public class MainMenu
         menuVBox.getChildren().add(exit);
 
         menuVBox.setTranslateX(430);
-        menuVBox.setTranslateY(50);
+        menuVBox.setTranslateY(100);
         root.setCenter(menuVBox);
 
         Scene scene=new Scene(root,1100,600);

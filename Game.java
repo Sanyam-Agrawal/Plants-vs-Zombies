@@ -40,7 +40,6 @@ public class Game
         this.stage=stage;
         this.player=new Player(name,this);
         this.level_menu=new LevelMenu(app,stage);
-        System.out.println(level_menu);
     }
 
     public Scene getLevelMenuScene()

@@ -36,7 +36,6 @@ public class App extends Application
 
         this.main_menu_scene=main_menu.createScene();
         this.background_scene=background.createScene();
-        this.name_menu_scene=name_menu.createScene();
         this.game_menu_scene=game_menu.createScene();
     }
 
@@ -45,9 +44,9 @@ public class App extends Application
         return main_menu_scene;
     }
     
-    public Scene getNameMenuScene()
+    public Scene getNameMenuScene(boolean is_new)
     {
-        return name_menu_scene;
+        return this.name_menu_scene=name_menu.createScene(is_new);
     }
 
     public Scene getBackgroundScene()
@@ -70,7 +69,6 @@ public class App extends Application
         if(this.game==null)
         {
             this.game=new Game(this,stage,name);
-            // this.game_scene = this.game.createScene();
         }
     }
 

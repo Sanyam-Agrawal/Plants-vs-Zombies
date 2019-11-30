@@ -26,6 +26,7 @@ public class Game
     private ArrayList<Image> plantmenublurredimages = new ArrayList<>();
     private TranslateTransition move_sun;
     private Player player;
+
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
 
@@ -42,8 +43,8 @@ public class Game
         this.stage=stage;
         this.player=player;
     }
-    
-    public Scene createScene(Player player,int level)
+
+    public Scene createScene(Player player,int level_no)
     {
         root = new BorderPane();
         VBox gameVBox = new VBox(10.0);
@@ -221,7 +222,7 @@ public class Game
                                 else if (which_plant==0)
                                 {
                                     Plants plan = plant;
-                                    Timeline sunfgen = new Timeline(new KeyFrame(Duration.millis(5000), new EventHandler<ActionEvent>() {
+                                    Timeline sunfgen = new Timeline(new KeyFrame(Duration.millis(6000), new EventHandler<ActionEvent>() {
                                                     @Override
                                                     public void handle(ActionEvent event) {
                                                         if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
@@ -231,7 +232,7 @@ public class Game
                                     sunfgen.setCycleCount(Timeline.INDEFINITE);
                                     sunfgen.play();
                                 }
-                                else if(which_plant==4)
+                                else if (which_plant==4)
                                 {
                                     Plants plan = plant;
                                     Timeline blast = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
@@ -263,16 +264,21 @@ public class Game
         VBox plant_chooser = createPlantMenu();
         root.getChildren().add(plant_chooser);
 
-        // Timeline zomgen = new Timeline(new KeyFrame(Duration.millis(level.getFrequency()), new EventHandler<ActionEvent>()
-        //             {
-        //                 @Override
-        //                 public void handle(ActionEvent event) {
-        //                     root.getChildren().add(rows.get(2).spawnZombie(1));
-        //                 }
-        //             }));
-        // zomgen.setCycleCount(Timeline.INDEFINITE);
-        // zomgen.play();
-        root.getChildren().add(rows.get(2).spawnZombie(1));
+        Random r = new Random();
+
+        Level level = new Level(1);
+
+        Timeline zomgen = new Timeline(new KeyFrame(Duration.millis(level.getFrequency()), new EventHandler<ActionEvent>()
+                    {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            int row_no = r.nextInt(5);
+                            root.getChildren().add(rows.get(row_no).spawnZombie(level.getSeverity()));
+                        }
+                    }));
+        zomgen.setCycleCount(Timeline.INDEFINITE);
+        zomgen.play();
+
         return scene;
     }
 
@@ -348,6 +354,8 @@ public class Game
                 gameover(false);
                 return;
             }
+
+            if (lawnmower==null) continue;
 
             if (zombie.getVBox().getTranslateX()<=HOUSE_LAST_LINE)
                 lawnmower.startMoving();
@@ -510,13 +518,16 @@ public class Game
                 sun.getChildren().clear();
             }
         );
+
+        boolean[] done = new boolean[1];
         Timeline remove_sun = new Timeline(new KeyFrame(Duration.millis(3000), new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
-                            if (isPaused) return;
+                            if (isPaused || done[0]) return;
+                            done[0] = true;
                             sun.getChildren().clear();
                         }}));
-        remove_sun.setCycleCount(1);
+        remove_sun.setCycleCount(Timeline.INDEFINITE);
         remove_sun.play();
 
         sun.setTranslateX(x);
@@ -529,8 +540,6 @@ public class Game
     {
         VBox menu = new VBox(50);
         menu.setSpacing(0);
-        // menu.setMaxWidth(100);
-        // menu.setMaxHeight(75);
         menu.setMaxWidth(180);
         menu.setMaxHeight(70);
 
@@ -542,7 +551,6 @@ public class Game
             Image image = new Image(getClass().getResourceAsStream("blurred_"+s));
             ImageView imageView=new ImageView(image);
             imageView.setFitHeight(100);
-            // imageView.setFitWidth(75);
             imageView.setFitWidth(120);
             plantmenuimageviews.add(imageView);
             plantmenublurredimages.add(image);

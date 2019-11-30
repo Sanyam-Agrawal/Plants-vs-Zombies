@@ -25,6 +25,8 @@ class Row implements Serializable
 
 	private final boolean[] columns;
 
+	private Random r;
+
 	Row (int _middle_point)
 	{
 		middle_point = _middle_point;
@@ -33,6 +35,7 @@ class Row implements Serializable
 		lawnmower = new LawnMower();
 		zombies = new HashSet<>();
 		columns = new boolean[9];
+		r = new Random();
 	}
 
 	public boolean isColumnOkay(int column) { return !columns[column]; }
@@ -64,9 +67,11 @@ class Row implements Serializable
 	public VBox spawnZombie (int severity)
 	{
 		Zombies zom;
-		switch (severity)
+		switch (r.nextInt(severity))
 		{
-			case 1: zom = new Zombies(); break;
+			case 1: zom = new ConeHeadZombies(); break;
+			case 2: zom = new BucketHeadZombies(); break;
+			case 3: zom = new FootballZombies(); break;
 			default: zom = new Zombies();
 		}
 

@@ -292,7 +292,8 @@ public class Game
 
             for (Zombies zombie : row.getZombies())
             {
-                if ((zombie.getVBox().getTranslateX() - pea.getVBox().getTranslateX()) < 3)
+                double diff = zombie.getVBox().getTranslateX() - pea.getVBox().getTranslateX();
+                if (0<=diff && diff<3)
                 {
                     zombie.decreaseHealth(pea.getAttack());
                     if (pea.isFreezing()) zombie.freeze();

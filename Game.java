@@ -1,3 +1,4 @@
+
 import javafx.stage.*;
 import javafx.event.*;
 import javafx.scene.image.*;
@@ -471,7 +472,7 @@ public class Game
         Image image = new Image("sun.png");
         ImageView view_image= new ImageView(image);
 
-        l_score=new Button(""+this.score);
+        l_score=new Button(""+level.score);
         l_score.setFont(Font.font("Serif", FontWeight.EXTRA_BOLD, 30));
         l_score.setStyle("-fx-background-radius: 4em;" + "-fx-background-color: #99ffcc;");
         l_score.setMinWidth(125);

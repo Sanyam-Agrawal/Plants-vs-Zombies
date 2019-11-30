@@ -49,6 +49,25 @@ class Row
 
 	public void removeLawnMower() { lawnmower = null; }
 
+	public VBox spawnZombie (int severity)
+	{
+		Zombies zom;
+		switch (severity)
+		{
+			case 1: zom = new Zombies(); break;
+			default: zom = new Zombies();
+		}
+
+		while (zom.getHealth()==0);
+		this.zombies.add(zom);
+
+		VBox res;
+		while ((res = zom.getVBox())==null);
+		res.setTranslateY(middle_point-85);
+		res.setTranslateX(1100);
+		return res;
+	}
+
 	public int getMiddle() { return this.middle_point; }
 	public Map<Plants,Integer> getPlants() { return this.plants; }
 	public Set<Peas> getPeas() { return this.peas; }

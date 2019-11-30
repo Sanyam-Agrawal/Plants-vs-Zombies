@@ -13,11 +13,17 @@ import javafx.util.Duration;
 
 class LawnMower extends GridObject
 {
+	private boolean isMoving;
+
 	LawnMower ()
 	{
 		super(10,0);
 		this.vBox = this.createVBox();
+		isMoving = false;
 	}
+
+	public void startMoving() { isMoving = true; }
+	public boolean moves() { return isMoving; }
 
 	protected VBox createVBox()
 	{

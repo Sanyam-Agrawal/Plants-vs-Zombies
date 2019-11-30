@@ -208,7 +208,8 @@ public class Game
         VBox plant_chooser = createPlantMenu();
         root.getChildren().add(plant_chooser);
 
-
+        VBox z = rows.get(2).spawnZombie(1);
+        root.getChildren().add(z);
 
         return scene;
     }
@@ -248,7 +249,7 @@ public class Game
 
             for (Zombies zombie : row.getZombies())
             {
-                if (pea.getVBox().getBoundsInParent().intersects(zombie.getVBox().getBoundsInParent()))
+                if (Math.abs(zombie.getVBox().getTranslateX() - pea.getVBox().getTranslateX()) < 10)
                 {
                     zombie.decreaseHealth(pea.getAttack());
                     if (pea.isFreezing()) zombie.freeze();
@@ -261,33 +262,34 @@ public class Game
                 }
             }
 
-            if (stillThere) pea.getVBox().setLayoutX(pea.getVBox().getLayoutX() + pea.getXdelta());
+            if (stillThere) pea.getVBox().setTranslateX(pea.getVBox().getTranslateX() + pea.getXdelta());
         }
     }
 
     void handleLawnMowers(Row row)
     {
         LawnMower lawnmower = row.getLawnMower();
-        boolean moveLM = false;
 
         for (Zombies zombie : row.getZombies())
         {
-            if (lawnmower==null && zombie.getVBox().getLayoutX()<=HOUSE_LAST_LINE)
-            {
-                gameover(false);
-                return;
+            if (lawnmower==null && zombie.getVBox().getTranslateX()<=HOUSE_LAST_LINE)
+            {    
+                    gameover(false);
+                    return;
             }
 
-            if (lawnmower!=null && lawnmower.getVBox().getBoundsInParent().intersects(zombie.getVBox().getBoundsInParent()))
-            {
+            if (zombie.getVBox().getTranslateX()<=HOUSE_LAST_LINE)
+                lawnmower.startMoving();
+
+            if (Math.abs(zombie.getVBox().getTranslateX() - lawnmower.getVBox().getTranslateX()) < 10)
                 zombie.decreaseHealth(10000);
-                moveLM = true;
-            }
         }
 
-        if (moveLM) lawnmower.getVBox().setLayoutX(lawnmower.getVBox().getLayoutX() + lawnmower.getXdelta());
+        if (lawnmower==null) return;
 
-        if (lawnmower!=null && lawnmower.getVBox().getLayoutX() >= RIGHTMOST_LINE)
+        if (lawnmower.moves()) lawnmower.getVBox().setTranslateX(lawnmower.getVBox().getTranslateX() + lawnmower.getXdelta());
+
+        if (lawnmower.getVBox().getTranslateX() >= RIGHTMOST_LINE)
         {
             lawnmower.getVBox().getChildren().clear();
             row.removeLawnMower();
@@ -297,6 +299,7 @@ public class Game
     void handleZombies(Row row)
     {
         Set<Zombies> zombies = row.getZombies();
+        boolean move_flag = true;
 
         for (Iterator<Zombies> i = zombies.iterator(); i.hasNext(); )
         {
@@ -313,14 +316,15 @@ public class Game
             {
                 Plants plant = plant_c.getKey();
 
-                if (zombie.getVBox().getBoundsInParent().intersects(plant.getVBox().getBoundsInParent()))
+                if (Math.abs(zombie.getVBox().getTranslateX() - plant.getVBox().getTranslateX()) < 10)
                 {
                     plant.decreaseHealth(zombie.getAttack());
+                    move_flag = false;
                     break;
                 }
             }
 
-            zombie.getVBox().setLayoutX(zombie.getVBox().getLayoutX() + zombie.getXdelta());
+            if (move_flag) zombie.getVBox().setTranslateX(zombie.getVBox().getTranslateX() + zombie.getXdelta());
         }
     }
 

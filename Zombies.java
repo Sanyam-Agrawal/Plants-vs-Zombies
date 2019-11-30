@@ -1,18 +1,18 @@
 public class Zombies extends Creature
 {
-	protected int attack;
+    protected double attack;
 
     public Zombies(){
-        super("z_normal.gif");
-        this.health = 50;
-        this.attack = 10;
+        super("z_normal.gif",50);
+        this.attack = 0.1;
     }
 
-    public Zombies(String imgSrc){
-        super(imgSrc);
+    public Zombies(String imgSrc, double _health, double _attack){
+        super(imgSrc,_health);
+        this.attack = _attack;
     }
 
-    public int getAttack() { return this.attack; }
+    public double getAttack() { return this.attack; }
 
     public void freeze() {  }
 }

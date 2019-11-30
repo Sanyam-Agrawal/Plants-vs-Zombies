@@ -10,3 +10,11 @@
 
 //cherrybomb ki health dekhlo
 //freeze of zombies implement karna hai
+
+//gameover, win loss
+
+//have to generate new zombies in row.spawnZombie
+
+
+
+//handlePeas not tested !!!!

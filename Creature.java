@@ -16,10 +16,11 @@ public abstract class Creature extends GridObject
     private String imgSrc;
     private Image img;
 
-    protected int health;
+    protected double health;
 
-    public Creature(String imgSrc){
-        super(-10,0);
+    public Creature(String imgSrc, double _health){
+        super(-1,0);
+        health = _health;
         this.imgSrc = imgSrc;
         this.img = new Image(this.imgSrc);
         this.vBox = this.createVBox();
@@ -36,12 +37,10 @@ public abstract class Creature extends GridObject
         return created;
     }
 
-    public int getHealth() { return this.health; }
-    public void decreaseHealth (int delta) { this.health -= delta; }
+    public double getHealth() { return this.health; }
+    public void decreaseHealth (double delta) { this.health -= delta; }
 
-    public Image getImg(){
-        return this.img;
-    }
+    public Image getImg() { return this.img; }
 
     public void setImgSrc(String newImgSrc){
         this.imgSrc = newImgSrc;

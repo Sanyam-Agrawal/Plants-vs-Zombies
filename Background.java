@@ -39,6 +39,7 @@ public class Background
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     stage.setScene(myapp.getMainMenuScene());
                 } 
             }; 

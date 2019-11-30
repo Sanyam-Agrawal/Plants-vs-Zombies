@@ -38,6 +38,7 @@ public class GameMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     stage.setScene(myapp.getPlayer().getGameScene());
                     myapp.getPlayer().getGame().isPaused = false;
                 } 
@@ -53,6 +54,7 @@ public class GameMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     a.show(); 
                 } 
             }; 
@@ -67,6 +69,7 @@ public class GameMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     a.show();
                 } 
             }; 
@@ -81,6 +84,7 @@ public class GameMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     stage.setScene(myapp.getMainMenuScene());
                 } 
             }; 

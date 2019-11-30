@@ -35,6 +35,7 @@ public class MainMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     stage.setScene(myapp.getNameMenuScene(true));
                 } 
             };
@@ -49,6 +50,7 @@ public class MainMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     stage.setScene(myapp.getNameMenuScene(false));
                 } 
             }; 
@@ -64,6 +66,7 @@ public class MainMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     Platform.exit();
                 } 
             }; 

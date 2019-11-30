@@ -50,6 +50,7 @@ public class NameMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     if(name.getText().length()!=0)
                     {
                         if(is_new)
@@ -81,6 +82,7 @@ public class NameMenu
             { 
                 public void handle(ActionEvent e) 
                 { 
+                    myapp.click();
                     stage.setScene(myapp.getMainMenuScene());
                 } 
             };

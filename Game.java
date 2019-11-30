@@ -191,21 +191,25 @@ public class Game
                                 VBox p = rows.get(row_no).addPlant(plant,column_no);
                                 p.setTranslateX(middle_point[column_no]-40);
                                 root.getChildren().add(p);
-                                if(plantSelected.get(0)==1)
-                                {
-                                    
-                                    VBox res = rows.get(row_no).addPea(column_no,false);
-                                    res.setTranslateX(middle_point[column_no-40]);
-                                    root.getChildren().add(res);
-                                }
-                                else if(plantSelected.get(0)==2)
-                                {
-                                    VBox res = rows.get(row_no).addPea(column_no,true);
-                                    res.setTranslateX(middle_point[column_no-40]);
-                                    root.getChildren().add(res);
-                                }
-                                plantSelected.set(0,-1);
                                 scene.setCursor(default_cursor);
+
+                                if(plantSelected.get(0)==1 || plantSelected.get(0)==2)
+                                {
+                                    Timeline peagen = new Timeline(new KeyFrame(Duration.seconds(2), new EventHandler<ActionEvent>()
+                                                {
+                                                    @Override
+                                                    public void handle(ActionEvent event) {
+                                                        if (isPaused) return;
+                                                        VBox res = rows.get(row_no).addPea(column_no, plantSelected.get(0)==2);
+                                                        res.setTranslateX(middle_point[column_no]+2);
+                                                        root.getChildren().add(res);
+                                                    }
+                                                }));
+                                    peagen.setCycleCount(Timeline.INDEFINITE);
+                                    peagen.play();
+                                }
+
+                                plantSelected.set(0,-1);
                             }
                         }
                         else if (0<=mouseX && mouseX<=120 && 0<=mouseY && mouseY<=490)
@@ -254,15 +258,28 @@ public class Game
     void handlePeas(Row row)
     {
         Set<Peas> peas = row.getPeas();
-        boolean stillThere = false;
 
         for (Iterator<Peas> i = peas.iterator(); i.hasNext(); )
         {
             Peas pea = i.next();
+            boolean stillThere = true;
+
+            if (pea.getVBox().getTranslateX()>=1100)
+            {
+                pea.getVBox().getChildren().clear();
+                i.remove();
+                continue;
+            }
 
             for (Zombies zombie : row.getZombies())
             {
-                if (Math.abs(zombie.getVBox().getTranslateX() - pea.getVBox().getTranslateX()) < 10)
+                if (pea.getVBox()==null)
+                {    
+                    System.out.println(pea.getVBox()==null);
+                    continue;
+                }
+
+                if ((zombie.getVBox().getTranslateX() - pea.getVBox().getTranslateX()) < 3)
                 {
                     zombie.decreaseHealth(pea.getAttack());
                     if (pea.isFreezing()) zombie.freeze();
@@ -312,11 +329,11 @@ public class Game
     void handleZombies(Row row)
     {
         Set<Zombies> zombies = row.getZombies();
-        boolean move_flag = true;
 
         for (Iterator<Zombies> i = zombies.iterator(); i.hasNext(); )
         {
             Zombies zombie = i.next();
+            boolean move_flag = true;
 
             if (zombie.getHealth() <= 0)
             {

@@ -13,41 +13,27 @@ import javafx.util.Duration;
 
 class Peas extends GridObject
 {
-	private boolean isIced;
+    private boolean isIced;
 
-	Peas(boolean ice)
-	{
-		super(1,0);
-		this.isIced = ice;
-	}
+    Peas(boolean ice)
+    {
+        super(2,0);
+        this.isIced = ice;
+        this.vBox = this.createVBox();
+    }
 
-	public boolean isFreezing() { return this.isIced; }
+    public boolean isFreezing() { return this.isIced; }
 
-	protected VBox createVBox()
-	{
-		if(isIced)
-		{
-			VBox vbox=new VBox();
-			Image image = new Image(getClass().getResourceAsStream("pea.png"));
-            ImageView imageView=new ImageView(image);
-            imageView.setFitHeight(100);
-            // imageView.setFitWidth(75);
-            imageView.setFitWidth(120);
-            vbox.getChildren().add(imageView);
-            return vbox;
-		}
-		else
-		{
-			VBox vbox=new VBox();
-			Image image = new Image(getClass().getResourceAsStream("pea.png"));
-            ImageView imageView=new ImageView(image);
-            imageView.setFitHeight(100);
-            // imageView.setFitWidth(75);
-            imageView.setFitWidth(120);
-            vbox.getChildren().add(imageView);
-            return vbox;
-		}
-	}
+    protected VBox createVBox()
+    {
+        Image image = isIced ? new Image(getClass().getResourceAsStream("pea.jpeg")) : new Image(getClass().getResourceAsStream("pea.jpeg"));
+        VBox vbox=new VBox(50);
+        ImageView imageView=new ImageView(image);
+        imageView.setFitHeight(30);
+        imageView.setFitWidth(30);
+        vbox.getChildren().add(imageView);
+        return vbox;
+    }
 
-	public int getAttack() { return 10; }
+    public int getAttack() { return 10; }
 }

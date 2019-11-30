@@ -47,13 +47,13 @@ class Row
 		return result;
 	}
 
-	public VBox addPea(int column,boolean isFreeze)
+	public VBox addPea (int column, boolean isFreeze)
 	{
-		Peas pea=new Peas(isFreeze);
-		this.peas.add(pea);
-	    VBox res;
+	    Peas pea = new Peas(isFreeze);
+	    this.peas.add(pea);
+	    VBox res = pea.getVBox();
 	    while ((res=pea.getVBox())==null);
-	    res.setTranslateY(middle_point);
+	    res.setTranslateY(middle_point+20);
 	    return res;
 	}
 

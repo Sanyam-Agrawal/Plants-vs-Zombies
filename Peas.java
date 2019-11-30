@@ -28,7 +28,7 @@ class Peas extends GridObject
 
     protected VBox createVBox()
     {
-        Image image = isIced ? new Image(getClass().getResourceAsStream("pea.jpeg")) : new Image(getClass().getResourceAsStream("pea.jpeg"));
+        Image image = isIced ? new Image(getClass().getResourceAsStream("bluepea.png")) : new Image(getClass().getResourceAsStream("pea.png"));
         VBox vbox=new VBox(50);
         ImageView imageView=new ImageView(image);
         imageView.setFitHeight(30);

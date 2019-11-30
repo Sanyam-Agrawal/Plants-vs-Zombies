@@ -44,6 +44,7 @@ class Row
 		this.plants.put(plant,column);
 		VBox result = plant.getVBox();
 		result.setTranslateY(middle_point);
+		if (plant instanceof FreezePeaShooter) result.setTranslateY(middle_point-20);
 		return result;
 	}
 

@@ -1,6 +1,6 @@
 public class FreezePeaShooter extends Plants
 {
     public FreezePeaShooter(){
-        super("FreezePeashooter.gif",175,70);
+        super("Snow.gif",175,70);
     }
 }

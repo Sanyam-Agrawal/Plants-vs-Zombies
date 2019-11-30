@@ -205,12 +205,13 @@ public class Game
 
                                 if(plantSelected.get(0)==1 || plantSelected.get(0)==2)
                                 {
+                                    boolean flag = plantSelected.get(0)==2;
                                     Timeline peagen = new Timeline(new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>()
                                                 {
                                                     @Override
                                                     public void handle(ActionEvent event) {
                                                         if (isPaused) return;
-                                                        VBox res = rows.get(row_no).addPea(column_no, plantSelected.get(0)==2);
+                                                        VBox res = rows.get(row_no).addPea(column_no, flag);
                                                         if (res==null) return;
                                                         res.setTranslateX(middle_point[column_no]+2);
                                                         root.getChildren().add(res);
@@ -236,9 +237,16 @@ public class Game
         VBox plant_chooser = createPlantMenu();
         root.getChildren().add(plant_chooser);
 
-        VBox z = rows.get(2).spawnZombie(1);
-        root.getChildren().add(z);
-
+        // Timeline zomgen = new Timeline(new KeyFrame(Duration.millis(level.getFrequency()), new EventHandler<ActionEvent>()
+        //             {
+        //                 @Override
+        //                 public void handle(ActionEvent event) {
+        //                     root.getChildren().add(rows.get(2).spawnZombie(1));
+        //                 }
+        //             }));
+        // zomgen.setCycleCount(Timeline.INDEFINITE);
+        // zomgen.play();
+        root.getChildren().add(rows.get(2).spawnZombie(1));
         return scene;
     }
 

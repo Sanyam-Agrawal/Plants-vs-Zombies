@@ -12,8 +12,9 @@ import javafx.animation.*;
 import javafx.util.Duration;
 
 import java.util.*;
+import java.io.*;
 
-class Row 
+class Row implements Serializable
 {
 	private int middle_point;
 

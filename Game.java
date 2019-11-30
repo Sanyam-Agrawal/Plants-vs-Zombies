@@ -21,29 +21,26 @@ public class Game
     private Button l_score;
     public Stage stage;
     public App myapp;
-    // private Player player;
     private ArrayList<ImageView> plantmenuimageviews = new ArrayList<>();
     private ArrayList<Image> plantmenuimages = new ArrayList<>();
     private ArrayList<Image> plantmenublurredimages = new ArrayList<>();
     private TranslateTransition move_sun;
-    
+
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
 
     public boolean isPaused = false;
-    
+
     public Game()
     {
-        
+
     }
-    
+
     public Game(App app,Stage stage)
     {
         this.myapp=app;
         this.stage=stage;
     }
-
-    
 
     public Scene createScene()
     {
@@ -80,7 +77,7 @@ public class Game
             mower.setTranslateX(180);
             mower.setTranslateY(rows.get(i).getMiddle());
         }
-        
+
         Timeline sungen = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>()
                     {
                         @Override
@@ -90,7 +87,7 @@ public class Game
                     }));
         sungen.setCycleCount(Timeline.INDEFINITE);
         sungen.play();
-        
+
         long[] plantAvailable = new long[5];
         long start_time = System.nanoTime();
         for (int i=0; i<5; ++i) plantAvailable[i] = start_time;
@@ -109,10 +106,10 @@ public class Game
                                 if(move_sun!=null) move_sun.pause();
                                 return;
                             }
-  
+
                             if(move_sun!=null) move_sun.play();
                             sungen.play();
-                            
+
                             long curr_time = System.nanoTime();
 
                             for (int i=0; i<5; ++i)
@@ -229,9 +226,24 @@ public class Game
                                                         if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
                                                         VBox psuned = produceSun(middle_point[column_no]-30,rows.get(row_no).getMiddle());
                                                     }
-                                    }));
+                                                }));
                                     sunfgen.setCycleCount(Timeline.INDEFINITE);
                                     sunfgen.play();
+                                }
+                                else if(which_plant==4)
+                                {
+                                    Plants plan = plant;
+                                    Timeline blast = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+                                                    @Override
+                                                    public void handle(ActionEvent event) {
+                                                        if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
+                                                        // change imageview to boom.gif and kill zombies and remove plant 
+                                                        // may be one more timeline needed to show boom effect(nested timeline)
+                                                    }
+                                                }));
+                                    blast.setCycleCount(1);
+                                    blast.play();
+
                                 }
 
                                 plantSelected.set(0,-1);
@@ -426,7 +438,7 @@ public class Game
         Image image = new Image("sun.png");
         ImageView view_image= new ImageView(image);
 
-        this.score=50;
+        this.score=250;
         l_score=new Button(Integer.toString(this.score));
         l_score.setFont(Font.font("Serif", FontWeight.EXTRA_BOLD, 30));
         l_score.setStyle("-fx-background-radius: 4em;" + "-fx-background-color: #99ffcc;");
@@ -497,6 +509,15 @@ public class Game
                 sun.getChildren().clear();
             }
         );
+        Timeline remove_sun = new Timeline(new KeyFrame(Duration.millis(3000), new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            if (isPaused) return;
+                            sun.getChildren().clear();
+                        }}));
+        remove_sun.setCycleCount(1);
+        remove_sun.play();
+
         sun.setTranslateX(x);
         sun.setTranslateY(y);
         root.getChildren().add(sun);

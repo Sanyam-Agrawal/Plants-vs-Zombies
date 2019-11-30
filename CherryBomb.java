@@ -2,6 +2,6 @@ public class CherryBomb extends Plants
 {
     public CherryBomb()
     {
-        super("",150,-1);
+        super("CherryBomb.gif",150,100);
     }
 }

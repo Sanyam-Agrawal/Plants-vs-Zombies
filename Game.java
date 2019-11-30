@@ -101,6 +101,7 @@ public class Game
         for (int i=0; i<5; ++i) plantAvailable[i] = start_time;
 
         long[] timeNeeded = {5000000000L, 5000000000L, 10000000000L, 15000000000L, 25000000000L};
+        int[] cost = {50,100,175,50,150};
 
         Timeline mainTimer = new Timeline (new KeyFrame(Duration.millis(20), new EventHandler<ActionEvent>()
                     {
@@ -121,7 +122,7 @@ public class Game
 
                             for (int i=0; i<5; ++i)
                             {
-                                if ((curr_time-plantAvailable[i]) < timeNeeded[i])
+                                if ((curr_time-plantAvailable[i]) < timeNeeded[i] || score < cost[i])
                                     plantmenuimageviews.get(i).setImage(plantmenublurredimages.get(i));
                                 else
                                     plantmenuimageviews.get(i).setImage(plantmenuimages.get(i));
@@ -170,7 +171,7 @@ public class Game
                         {
                             long curr_time = System.nanoTime();
                             int which_plant = (int)(mouseY/100);
-                            if ((curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant])
+                            if ((curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant] && score>=cost[which_plant])
                             {
                                 plantAvailable[which_plant] = curr_time;
                                 plantSelected.set(0,which_plant);
@@ -197,6 +198,8 @@ public class Game
                                 }
 
                                 if (plant==null) return;
+
+                                score -= cost[plantSelected.get(0)];
 
                                 VBox p = rows.get(row_no).addPlant(plant,column_no);
                                 p.setTranslateX(middle_point[column_no]-40);

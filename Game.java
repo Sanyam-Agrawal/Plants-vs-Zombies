@@ -25,6 +25,7 @@ public class Game
     private ArrayList<Image> plantmenuimages = new ArrayList<>();
     private ArrayList<Image> plantmenublurredimages = new ArrayList<>();
     private TranslateTransition move_sun;
+    private Map<Timeline,ArrayList<Boolean>> allTimelines = new HashMap<>();
     private Player player;
 
     final double HOUSE_LAST_LINE = 250;
@@ -204,12 +205,13 @@ public class Game
 
                                 if (which_plant==1 || which_plant==2)
                                 {
+                                    Plants plan = plant;
                                     boolean flag = (which_plant==2);
                                     Timeline peagen = new Timeline(new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>()
                                                 {
                                                     @Override
                                                     public void handle(ActionEvent event) {
-                                                        if (isPaused) return;
+                                                        if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
                                                         VBox res = rows.get(row_no).addPea(column_no, flag);
                                                         if (res==null) return;
                                                         res.setTranslateX(middle_point[column_no]+2);
@@ -278,6 +280,24 @@ public class Game
                     }));
         zomgen.setCycleCount(Timeline.INDEFINITE);
         zomgen.play();
+
+        Timeline gc = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>()
+                    {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            for (Iterator<Map.Entry<Timeline,ArrayList<Boolean>>> i = allTimelines.entrySet().iterator(); i.hasNext(); )
+                            {
+                                Map.Entry<Timeline,ArrayList<Boolean>> entry = i.next(); 
+                                if (entry.getValue().get(0))
+                                {
+                                    entry.getKey().stop();
+                                    i.remove();
+                                }
+                            }
+                        }
+                    }));
+        gc.setCycleCount(Timeline.INDEFINITE);
+        gc.play();
 
         return scene;
     }
@@ -519,16 +539,18 @@ public class Game
             }
         );
 
-        boolean[] done = new boolean[1];
+        ArrayList<Boolean> done = new ArrayList<>(); done.add(false);
         Timeline remove_sun = new Timeline(new KeyFrame(Duration.millis(3000), new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
-                            if (isPaused || done[0]) return;
-                            done[0] = true;
+                            if (isPaused || done.get(0)) return;
+                            done.set(0,true);
                             sun.getChildren().clear();
                         }}));
         remove_sun.setCycleCount(Timeline.INDEFINITE);
         remove_sun.play();
+
+        allTimelines.put(remove_sun,done);
 
         sun.setTranslateX(x);
         sun.setTranslateY(y);

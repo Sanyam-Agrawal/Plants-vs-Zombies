@@ -44,7 +44,7 @@ public class NameMenu
         Button start_game = new Button("Start Game");
         start_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
         start_game.setStyle("-fx-background-color: #32CD32");
-        start_game.setTranslateX(480);
+        start_game.setTranslateX(415);
         start_game.setTranslateY(380);
         EventHandler<ActionEvent> start_game_event = new EventHandler<ActionEvent>() 
             { 

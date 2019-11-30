@@ -46,4 +46,6 @@ public abstract class Creature extends GridObject
         this.imgSrc = newImgSrc;
         this.img = new Image(this.imgSrc);
     }
+
+    public void reduceSpeed() { this.xdelta = -0.5; }
 }

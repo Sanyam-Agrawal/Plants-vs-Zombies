@@ -14,5 +14,5 @@ public class Zombies extends Creature
 
     public double getAttack() { return this.attack; }
 
-    public void freeze() {  }
+    public void freeze() { super.reduceSpeed(); }
 }

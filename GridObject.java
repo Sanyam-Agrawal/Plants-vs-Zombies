@@ -15,7 +15,7 @@ import java.io.*;
 
 abstract class GridObject implements Serializable
 {
-	private double xdelta, ydelta;
+	protected double xdelta, ydelta;
 
 	protected VBox vBox;
 

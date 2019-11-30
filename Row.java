@@ -47,6 +47,16 @@ class Row
 		return result;
 	}
 
+	public VBox addPea(int column,boolean isFreeze)
+	{
+		Peas pea=new Peas(isFreeze);
+		this.peas.add(pea);
+	    VBox res;
+	    while ((res=pea.getVBox())==null);
+	    res.setTranslateY(middle_point);
+	    return res;
+	}
+
 	public void removeLawnMower() { lawnmower = null; }
 
 	public VBox spawnZombie (int severity)

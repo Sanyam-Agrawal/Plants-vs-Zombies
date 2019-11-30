@@ -91,44 +91,44 @@ public class Game
         long[] timeNeeded = {5000000000L, 5000000000L, 10000000000L, 15000000000L, 25000000000L};
 
         Timeline mainTimer = new Timeline (new KeyFrame(Duration.millis(20), new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                if (isPaused) return;
+                    {
+                        @Override
+                        public void handle(ActionEvent event)
+                        {
+                            if (isPaused) return;
 
-                long curr_time = System.nanoTime();
+                            long curr_time = System.nanoTime();
 
-                for (int i=0; i<5; ++i)
-                {
-                    if ((curr_time-plantAvailable[i]) < timeNeeded[i])
-                        plantmenuimageviews.get(i).setImage(plantmenublurredimages.get(i));
-                    else
-                        plantmenuimageviews.get(i).setImage(plantmenuimages.get(i));
-                }
+                            for (int i=0; i<5; ++i)
+                            {
+                                if ((curr_time-plantAvailable[i]) < timeNeeded[i])
+                                    plantmenuimageviews.get(i).setImage(plantmenublurredimages.get(i));
+                                else
+                                    plantmenuimageviews.get(i).setImage(plantmenuimages.get(i));
+                            }
 
-                l_score.setText(""+score);
+                            l_score.setText(""+score);
 
-                for (Row row : rows)
-                {
-                 handlePlants(row);
-                 handlePeas(row);
-                 handleLawnMowers(row);
-                 handleZombies(row);
-                }
-            }
-        }));
+                            for (Row row : rows)
+                            {
+                                handlePlants(row);
+                                handlePeas(row);
+                                handleLawnMowers(row);
+                                handleZombies(row);
+                            }
+                        }
+                    }));
 
         mainTimer.setCycleCount(Timeline.INDEFINITE);
         mainTimer.play();
 
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event) {
-                if (!isPaused) root.getChildren().add(createSun());
-            }
-        }));
+                    {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            if (!isPaused) root.getChildren().add(createSun());
+                        }
+                    }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
 
@@ -144,66 +144,79 @@ public class Game
         Cursor default_cursor = scene.getCursor();
 
         root.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+                @Override
+                public void handle(MouseEvent event) {
 
-                if (isPaused) return;
+                    if (isPaused) return;
 
-                mouseX = event.getSceneX();
-                mouseY = event.getSceneY();
+                    mouseX = event.getSceneX();
+                    mouseY = event.getSceneY();
 
-                // System.out.println(mouseX + "+" + mouseY);
+                    // System.out.println(mouseX + "+" + mouseY);
 
-                if (plantSelected.get(0)==-1)
-                {
-                    if (0<=mouseX && mouseX<=120 && 0<=mouseY && mouseY<=490)
+                    if (plantSelected.get(0)==-1)
                     {
-                        long curr_time = System.nanoTime();
-                        int which_plant = (int)(mouseY/100);
-                        if ((curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant])
+                        if (0<=mouseX && mouseX<=120 && 0<=mouseY && mouseY<=490)
                         {
-                            plantAvailable[which_plant] = curr_time;
-                            plantSelected.set(0,which_plant);
-                            scene.setCursor(new ImageCursor(plantmenuimages.get(which_plant)));
+                            long curr_time = System.nanoTime();
+                            int which_plant = (int)(mouseY/100);
+                            if ((curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant])
+                            {
+                                plantAvailable[which_plant] = curr_time;
+                                plantSelected.set(0,which_plant);
+                                scene.setCursor(new ImageCursor(plantmenuimages.get(which_plant)));
+                            }
                         }
                     }
-                }
-                else
-                {
-                    if (HOUSE_LAST_LINE<=mouseX && mouseX<=1000 && 80<=mouseY && mouseY<=600)
+                    else
                     {
-                        int row_no = find_row_no(mouseY);
-                        int column_no = find_column_no(mouseX);
-                        if (rows.get(row_no).isColumnOkay(column_no))
+                        if (HOUSE_LAST_LINE<=mouseX && mouseX<=1000 && 80<=mouseY && mouseY<=600)
                         {
-                            Plants plant = null;
-                            switch(plantSelected.get(0))
+                            int row_no = find_row_no(mouseY);
+                            int column_no = find_column_no(mouseX);
+                            if (rows.get(row_no).isColumnOkay(column_no))
                             {
-                                case 0: plant = new SunFlower(); break;
-                                case 1: plant = new PeaShooter(); break;
-                                case 2: plant = new FreezePeaShooter(); break;
-                                case 3: plant = new Wallnut(); break;
-                                case 4: plant = new CherryBomb(); break;
+                                Plants plant = null;
+                                switch(plantSelected.get(0))
+                                {
+                                    case 0: plant = new SunFlower(); break;
+                                    case 1: plant = new PeaShooter(); break;
+                                    case 2: plant = new FreezePeaShooter(); break;
+                                    case 3: plant = new Wallnut(); break;
+                                    case 4: plant = new CherryBomb(); break;
+                                }
+
+                                if (plant==null) return;
+
+                                VBox p = rows.get(row_no).addPlant(plant,column_no);
+                                p.setTranslateX(middle_point[column_no]-40);
+                                root.getChildren().add(p);
+                                if(plantSelected.get(0)==1)
+                                {
+                                    
+                                    VBox res = rows.get(row_no).addPea(column_no,false);
+                                    res.setTranslateX(middle_point[column_no-40]);
+                                    root.getChildren().add(res);
+                                }
+                                else if(plantSelected.get(0)==2)
+                                {
+                                    VBox res = rows.get(row_no).addPea(column_no,true);
+                                    res.setTranslateX(middle_point[column_no-40]);
+                                    root.getChildren().add(res);
+                                }
+                                plantSelected.set(0,-1);
+                                scene.setCursor(default_cursor);
                             }
-
-                            if (plant==null) return;
-
-                            VBox p = rows.get(row_no).addPlant(plant,column_no);
-                            p.setTranslateX(middle_point[column_no]-40);
-                            root.getChildren().add(p);
+                        }
+                        else if (0<=mouseX && mouseX<=120 && 0<=mouseY && mouseY<=490)
+                        {
+                            plantAvailable[plantSelected.get(0)] = 0;
                             plantSelected.set(0,-1);
                             scene.setCursor(default_cursor);
                         }
                     }
-                    else if (0<=mouseX && mouseX<=120 && 0<=mouseY && mouseY<=490)
-                    {
-                        plantAvailable[plantSelected.get(0)] = 0;
-                        plantSelected.set(0,-1);
-                        scene.setCursor(default_cursor);
-                    }
                 }
-            }
-        });
+            });
 
         VBox plant_chooser = createPlantMenu();
         root.getChildren().add(plant_chooser);
@@ -253,10 +266,10 @@ public class Game
                 {
                     zombie.decreaseHealth(pea.getAttack());
                     if (pea.isFreezing()) zombie.freeze();
-            
+
                     pea.getVBox().getChildren().clear();
                     i.remove();
-                
+
                     stillThere = false;
                     break;
                 }
@@ -274,8 +287,8 @@ public class Game
         {
             if (lawnmower==null && zombie.getVBox().getTranslateX()<=HOUSE_LAST_LINE)
             {    
-                    gameover(false);
-                    return;
+                gameover(false);
+                return;
             }
 
             if (zombie.getVBox().getTranslateX()<=HOUSE_LAST_LINE)

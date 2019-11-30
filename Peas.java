@@ -17,7 +17,7 @@ class Peas extends GridObject
 
 	Peas(boolean ice)
 	{
-		super(10,0);
+		super(1,0);
 		this.isIced = ice;
 	}
 
@@ -25,8 +25,28 @@ class Peas extends GridObject
 
 	protected VBox createVBox()
 	{
-		//TODO
-		return null;
+		if(isIced)
+		{
+			VBox vbox=new VBox();
+			Image image = new Image(getClass().getResourceAsStream("pea.png"));
+            ImageView imageView=new ImageView(image);
+            imageView.setFitHeight(100);
+            // imageView.setFitWidth(75);
+            imageView.setFitWidth(120);
+            vbox.getChildren().add(imageView);
+            return vbox;
+		}
+		else
+		{
+			VBox vbox=new VBox();
+			Image image = new Image(getClass().getResourceAsStream("pea.png"));
+            ImageView imageView=new ImageView(image);
+            imageView.setFitHeight(100);
+            // imageView.setFitWidth(75);
+            imageView.setFitWidth(120);
+            vbox.getChildren().add(imageView);
+            return vbox;
+		}
 	}
 
 	public int getAttack() { return 10; }

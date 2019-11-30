@@ -18,7 +18,7 @@ public class Game
 {
     private BorderPane root;
     private double mouseX, mouseY;
-    private int score=0,progress=0;
+    private int progress=0;
     private Button l_score;
     public Stage stage;
     public App myapp;
@@ -28,8 +28,10 @@ public class Game
     private TranslateTransition move_sun;
     private Map<Timeline,ArrayList<Boolean>> allTimelines = new HashMap<>();
     private Player player;
+    private Level level;
     
     Media fire_pea_sound = new Media(new File("firepea.mp3").toURI().toString());
+
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
 
@@ -49,6 +51,9 @@ public class Game
 
     public Scene createScene(Player player,int level_no)
     {
+        this.player = player;
+        level = player.getLevel(level_no);
+
         root = new BorderPane();
         VBox gameVBox = new VBox(10.0);
 
@@ -119,13 +124,13 @@ public class Game
 
                             for (int i=0; i<5; ++i)
                             {
-                                if ((curr_time-plantAvailable[i]) < timeNeeded[i] || score < cost[i])
+                                if ((curr_time-plantAvailable[i]) < timeNeeded[i] || level.score < cost[i])
                                     plantmenuimageviews.get(i).setImage(plantmenublurredimages.get(i));
                                 else
                                     plantmenuimageviews.get(i).setImage(plantmenuimages.get(i));
                             }
 
-                            l_score.setText(""+score);
+                            l_score.setText(""+level.score);
 
                             for (Row row : rows)
                             {
@@ -160,15 +165,13 @@ public class Game
                     mouseX = event.getSceneX();
                     mouseY = event.getSceneY();
 
-                    // System.out.println(mouseX + "+" + mouseY);
-
                     if (plantSelected.get(0)==-1)
                     {
                         if (0<=mouseX && mouseX<=120 && 0<=mouseY && mouseY<=490)
                         {
                             long curr_time = System.nanoTime();
                             int which_plant = (int)(mouseY/100);
-                            if ((curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant] && score>=cost[which_plant])
+                            if ((curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant] && level.score>=cost[which_plant])
                             {
                                 plantAvailable[which_plant] = curr_time;
                                 plantSelected.set(0,which_plant);
@@ -198,7 +201,7 @@ public class Game
 
                                 if (plant==null) return;
 
-                                score -=cost[which_plant];
+                                level.score -= cost[which_plant];
 
                                 VBox p = rows.get(row_no).addPlant(plant,column_no);
                                 p.setTranslateX(middle_point[column_no]-40);
@@ -270,8 +273,6 @@ public class Game
         root.getChildren().add(plant_chooser);
 
         Random r = new Random();
-
-        Level level = new Level(1);
 
         Timeline zomgen = new Timeline(new KeyFrame(Duration.millis(level.getFrequency()), new EventHandler<ActionEvent>()
                     {
@@ -348,7 +349,7 @@ public class Game
             for (Zombies zombie : row.getZombies())
             {
                 double diff = zombie.getVBox().getTranslateX() - pea.getVBox().getTranslateX();
-                if (0<=diff && diff<3)
+                if (-35<=diff && diff<=5)
                 {
                     zombie.decreaseHealth(pea.getAttack());
                     if (pea.isFreezing()) zombie.freeze();
@@ -470,8 +471,7 @@ public class Game
         Image image = new Image("sun.png");
         ImageView view_image= new ImageView(image);
 
-        this.score=250;
-        l_score=new Button(Integer.toString(this.score));
+        l_score=new Button(""+this.score);
         l_score.setFont(Font.font("Serif", FontWeight.EXTRA_BOLD, 30));
         l_score.setStyle("-fx-background-radius: 4em;" + "-fx-background-color: #99ffcc;");
         l_score.setMinWidth(125);
@@ -518,7 +518,7 @@ public class Game
 
         sun.setOnMouseClicked(event -> 
             {
-                score+=25;    
+                level.score+=25;    
                 move_sun.stop();
                 sun.getChildren().clear();
             }
@@ -537,7 +537,7 @@ public class Game
         sun.getChildren().add(view_image);
         sun.setOnMouseClicked(event -> 
             {
-                score+=25;    
+                level.score+=25;    
                 sun.getChildren().clear();
             }
         );

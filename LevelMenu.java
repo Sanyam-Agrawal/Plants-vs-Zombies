@@ -11,13 +11,13 @@ import javafx.geometry.*;
 import javafx.scene.control.Alert.*;
 import javafx.application.*;
 import javafx.beans.value.*;
+
 public class LevelMenu
 {
     public Stage stage;
     public App myapp;
     Button level_buttons[];
 
-    int i;
     public LevelMenu(App app,Stage stage)
     {
         this.myapp=app;
@@ -31,7 +31,7 @@ public class LevelMenu
         boolean available_levels[]=myapp.getPlayer().getAvailabelLevels();
         level_buttons=new Button[6];
         menuVBox.setAlignment(Pos.CENTER);
-        for(i=1;i<6;i++)
+        for(int i=1;i<6;i++)
         {
             level_buttons[i] = new Button("Level "+i);
             level_buttons[i].setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
@@ -39,12 +39,13 @@ public class LevelMenu
             if(available_levels[i])
             {
                 level_buttons[i].setStyle("-fx-background-color: #32CD32");
+                int no = i;
                 EventHandler<ActionEvent> level_button_event = new EventHandler<ActionEvent>() 
                     { 
                         public void handle(ActionEvent e) 
                         { 
                             myapp.click();
-                            stage.setScene(myapp.createGameScene(stage,i));
+                            stage.setScene(myapp.createGameScene(stage,no));
                         } 
                     };
                 level_buttons[i].setOnAction(level_button_event);

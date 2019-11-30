@@ -23,6 +23,7 @@ public class App extends Application
     Media click_sound = new Media(new File("buttonclick.mp3").toURI().toString());
     private Scene background_scene, main_menu_scene, game_menu_scene,name_menu_scene,game_scene;
     private Game game;
+
     public App()
     {
 

@@ -13,8 +13,9 @@ import javafx.util.Duration;
 
 class Player
 {
-    boolean available_levels[];
-    String name;
+    private boolean available_levels[];
+    private String name;
+    private Level all_levels[];
 
     transient private LevelMenu level_menu;
     transient private Scene level_menu_scene;
@@ -24,6 +25,7 @@ class Player
         name=n;
         available_levels=new boolean[6];
         available_levels[1]=true;
+        all_levels=new Level[6];
         this.level_menu=new LevelMenu(myapp,stage);
     }
 
@@ -32,7 +34,12 @@ class Player
         return this.level_menu_scene=level_menu.createScene();
     }
 
-    
+    public Level getLevel(int level_no)
+    {
+        if (all_levels[level_no]==null) all_levels[level_no]=new Level(level_no);
+        return all_levels[level_no];
+    }
+
     public boolean[] getAvailabelLevels()
     {
         return available_levels;

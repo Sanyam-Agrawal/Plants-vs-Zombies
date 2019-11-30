@@ -28,6 +28,7 @@ class Row implements Serializable
     private Random r;
 
     MediaPlayer groan_zombie = new MediaPlayer(new Media(new File("groan_zombie.mp3").toURI().toString()));
+
     Row (int _middle_point)
     {
         middle_point = _middle_point;
@@ -54,8 +55,8 @@ class Row implements Serializable
 
     public VBox addPea (int column, boolean isFreeze)
     {
-        Peas pea = new Peas(this,isFreeze);
-        if (!pea.shouldShoot()) return null;
+        Peas pea = new Peas(isFreeze);
+        if (zombies.isEmpty()) return null;
         this.peas.add(pea);
         VBox res = pea.getVBox();
         while ((res=pea.getVBox())==null);
@@ -88,12 +89,8 @@ class Row implements Serializable
     }
 
     public int getMiddle() { return this.middle_point; }
-
     public Map<Plants,Integer> getPlants() { return this.plants; }
-
     public Set<Peas> getPeas() { return this.peas; }
-
     public LawnMower getLawnMower() { return this.lawnmower; }
-
     public Set<Zombies> getZombies() { return this.zombies; }
 }

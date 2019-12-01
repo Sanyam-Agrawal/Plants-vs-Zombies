@@ -10,6 +10,7 @@ import javafx.scene.layout.*;
 import javafx.geometry.*;
 import javafx.scene.control.Alert.*;
 import javafx.application.*;
+import java.io.*;
 
 public class GameMenu 
 {
@@ -25,10 +26,7 @@ public class GameMenu
     public Scene createScene()
     {
         BorderPane root=new BorderPane();
-        VBox menuVBox = new VBox(10.0);
-
-        Alert a = new Alert(AlertType.INFORMATION); 
-        a.setContentText("This feature is not yet implemented!!"); 
+        VBox menuVBox = new VBox(10.0); 
 
         Button resume_game = new Button("Resume Game");
         resume_game.setFont(Font.font("Brush Script MT", FontWeight.NORMAL, 36));
@@ -53,9 +51,23 @@ public class GameMenu
         EventHandler<ActionEvent> save_game_event = new EventHandler<ActionEvent>() 
             { 
                 public void handle(ActionEvent e) 
-                { 
+                {
                     myapp.click();
-                    a.show(); 
+                    try { Player.serialize(myapp.getPlayer()); }
+                    catch (IOException exc) {
+                        Alert a = new Alert(AlertType.INFORMATION); 
+                        a.setContentText("Some Input/Output error occurred!!\n" +
+                            "Unfortunately, we are unable to save your file.\n" +
+                            "Please share the console output with the authors.");
+                        a.show();
+
+                        System.out.println("-------START COPYING HERE-------");
+                        exc.printStackTrace();
+                        System.out.println("-------STOP COPYING HERE-------");
+
+                        return;
+                    }
+                    stage.setScene(myapp.getMainMenuScene());
                 } 
             }; 
         save_game.setOnAction(save_game_event); 
@@ -70,7 +82,8 @@ public class GameMenu
                 public void handle(ActionEvent e) 
                 { 
                     myapp.click();
-                    a.show();
+                    (myapp.getPlayer().getAllLevels())[myapp.getGame().getLevelNo()] = null;
+                    stage.setScene(myapp.createGameScene(stage,myapp.getGame().getLevelNo()));
                 } 
             }; 
         restart_game.setOnAction(restart_game_event); 

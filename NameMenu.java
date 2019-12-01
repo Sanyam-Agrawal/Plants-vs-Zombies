@@ -11,6 +11,8 @@ import javafx.geometry.*;
 import javafx.scene.control.Alert.*;
 import javafx.application.*;
 import javafx.beans.value.*;
+import java.io.*;
+
 public class NameMenu
 {
     public Stage stage;
@@ -51,22 +53,68 @@ public class NameMenu
                 public void handle(ActionEvent e) 
                 { 
                     myapp.click();
-                    if(name.getText().length()!=0)
+                    if(name.getText().length()!=0 && name.getText().matches("^[A-Z]{1,15}$"))
                     {
                         if(is_new)
                         {
                             myapp.createPlayer(name.getText(),stage);
-                            stage.setScene(myapp.getPlayer().getLevelMenuScene());
                         }
                         else
                         {
-                            // deserialize player
-                            // assign myapp and stage variables of player class since transient
-                            // assign player varaible of App class
-                            // stage.setScene(myapp.getPlayer().getLevelMenuScene()); /*move it out of if-else to avoid repetion
+                            Player player;
+
+                            try { player = Player.deserialize(name.getText()); }
+                            catch (FileNotFoundException exc)
+                            {
+                                Alert a = new Alert(AlertType.INFORMATION); 
+                                a.setContentText("No saved file for this name exists.\nPlease try another name.");
+                                a.show();
+                                return;
+                            }
+                            catch (IOException exc)
+                            {
+                                Alert a = new Alert(AlertType.INFORMATION); 
+                                a.setContentText("Some Input/Output error occurred!!\n" +
+                                    "Unfortunately, we are unable to load your file.\n" +
+                                    "Please share the console output with the authors.");
+                                a.show();
+
+                                System.out.println("-------START COPYING HERE-------");
+                                exc.printStackTrace();
+                                System.out.println("-------STOP COPYING HERE-------");
+
+                                return;
+                            }
+                            catch (ClassNotFoundException exc)
+                            {
+                                Alert a = new Alert(AlertType.INFORMATION); 
+                                a.setContentText("Problem. Please try again later.");
+                                a.show();
+                                return;
+                            }
+
+                            if (player==null)
+                            {
+                                Alert a = new Alert(AlertType.INFORMATION); 
+                                a.setContentText("Problem. Please try again later.");
+                                a.show();
+                                return;
+                            }
+
+                            player.setAttr(myapp,stage);
+                            myapp.setPlayer(player);
                         }
+
+                        stage.setScene(myapp.getPlayer().getLevelMenuScene());
                     }
-                } 
+                    else
+                    {
+                        Alert a = new Alert(AlertType.INFORMATION); 
+                        a.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                        a.setContentText("Name must consist of letters and its length must be between 1 and 15.");
+                        a.show();
+                    }
+                }
             };
 
         start_game.setOnAction(start_game_event);

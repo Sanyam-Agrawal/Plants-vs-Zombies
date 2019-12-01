@@ -18,7 +18,7 @@ abstract class GridObject implements Serializable
 	public double xpos, ypos;
 	protected double xdelta, ydelta;
 
-	protected VBox vBox;
+	protected transient VBox vBox;
 
 	GridObject (double i1, double i2)
 	{

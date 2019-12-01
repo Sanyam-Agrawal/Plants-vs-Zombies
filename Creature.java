@@ -14,7 +14,7 @@ import javafx.util.Duration;
 public abstract class Creature extends GridObject
 {
     private String imgSrc;
-    private Image img;
+    private transient Image img;
 
     protected double health;
 
@@ -32,7 +32,7 @@ public abstract class Creature extends GridObject
         created.setSpacing(40);
         created.setMaxWidth(250.0);
         created.setMaxHeight(100.0);
-        ImageView view_image= new ImageView(this.img);
+        ImageView view_image= new ImageView(new Image(this.imgSrc));
         created.getChildren().add(view_image);
         return created;
     }

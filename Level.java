@@ -17,6 +17,7 @@ import java.io.*;
 class Level implements Serializable
 {
 	private int no;
+	private int remain;
 	private int no_of_incoming;
 	private long frequency;
 	private int max_severity;
@@ -32,7 +33,7 @@ class Level implements Serializable
 	{
 		no = _no;
 
-		int remain = 1;
+		remain = 1;
 
 		switch(no)
 		{
@@ -65,13 +66,13 @@ class Level implements Serializable
 				break;
 
 			default:
-				no_of_incoming = 10;
+				no_of_incoming = 5;
 				frequency = 10000;
 				max_severity = 1;
-				remain = 3;
+				remain = 1;
 		}
 
-		score = 250;
+		score = 100;
 		kill_count = 0;
 		spawnCount = 0;
 
@@ -96,7 +97,7 @@ class Level implements Serializable
 
 	public void increaseKill() { ++kill_count; }
 
-	public int getProgress() { return Math.max(0,(int)(((double)kill_count)*100/no_of_incoming -1)); }
+	public int getProgress() { return Math.min(99,Math.max(0,(int)(((double)kill_count)*100/no_of_incoming -1))); }
 
 	public boolean spawn()
 	{
@@ -111,9 +112,7 @@ class Level implements Serializable
 
 	public boolean waveFinished()
 	{
-		boolean flag = true;
-		for (int i=0; i<5; ++i) flag = flag & (remaining[i]<=0);
-		return flag;
+		return (kill_count == ( no_of_incoming + 5*remain ) );
 	}
 
 	public int getNo() { return no; }

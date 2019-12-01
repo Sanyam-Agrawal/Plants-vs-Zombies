@@ -27,7 +27,7 @@ class Row implements Serializable
 
     private Random r;
 
-    MediaPlayer groan_zombie = new MediaPlayer(new Media(new File("groan_zombie.mp3").toURI().toString()));
+    private static AudioClip groan_zombie = new AudioClip("file:groan_zombie.mp3");
 
     Row (int _middle_point)
     {

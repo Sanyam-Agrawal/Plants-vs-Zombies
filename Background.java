@@ -11,16 +11,17 @@ import javafx.geometry.*;
 
 public class Background 
 {
-    public Stage stage;
-    public App myapp;
+    private static Background obj=null;
 
-    public Background(App app,Stage stage)
-    {
-        this.myapp=app;
-        this.stage=stage;
+    private Background(){
     }
     
-    public Scene createScene(){
+    public static Background getInstance(){
+        if(obj==null) obj=new Background();
+        return obj; 
+    }
+
+    public Scene createScene(App myapp, Stage stage){
         GridPane grid=new GridPane();
         grid.setAlignment(Pos.CENTER);
 

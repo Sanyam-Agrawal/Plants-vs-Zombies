@@ -25,13 +25,17 @@ public class Game
     private ArrayList<Image> plantmenuimages = new ArrayList<>();
     private ArrayList<Image> plantmenublurredimages = new ArrayList<>();
     private TranslateTransition move_sun;
+    private ArrayList<Integer> plantSelected;
     private ArrayList<Row> rows;
     private int middle_point[];
     private Map<Timeline,ArrayList<Boolean>> allTimelines = new HashMap<>();
+    private boolean[] plantUnlocked;
     private Player player;
     private Level level;
-    
-    Media fire_pea_sound = new Media(new File("firepea.mp3").toURI().toString());
+    private int level_no;
+
+    private AudioClip peasound = new AudioClip("file:firepea.mp3");
+    private AudioClip wave_sound = new AudioClip("file:hugewave.mp3");
 
     final double HOUSE_LAST_LINE = 250;
     final double RIGHTMOST_LINE  = 1100;
@@ -48,12 +52,19 @@ public class Game
         this.myapp=app;
         this.stage=stage;
         this.player=player;
+        level_no = -1;
     }
+
+    public int getLevelNo() { return this.level_no; }
+
+    private boolean holdingShovel = false;
 
     public Scene createScene(Player player,int level_no)
     {
         this.player = player;
         level = player.getLevel(level_no);
+        this.level_no = level_no;
+        this.plantUnlocked = player.getPlantUnlocked();
 
         root = new BorderPane();
         VBox gameVBox = new VBox(10.0);
@@ -150,7 +161,7 @@ public class Game
 
                             for (int i=0; i<5; ++i)
                             {
-                                if ((curr_time-plantAvailable[i]) < timeNeeded[i] || level.score < cost[i])
+                                if (!plantUnlocked[i] || (curr_time-plantAvailable[i]) < timeNeeded[i] || level.score < cost[i])
                                     plantmenuimageviews.get(i).setImage(plantmenublurredimages.get(i));
                                 else
                                     plantmenuimageviews.get(i).setImage(plantmenuimages.get(i));
@@ -181,7 +192,7 @@ public class Game
                 (750+820)/2, (820+910)/2, (910+1000)/2};
         middle_point = random_array;
          
-        ArrayList<Integer> plantSelected = new ArrayList<>();
+        plantSelected = new ArrayList<>();
         plantSelected.add(-1);
 
         Cursor default_cursor = scene.getCursor();
@@ -195,13 +206,32 @@ public class Game
                     mouseX = event.getSceneX();
                     mouseY = event.getSceneY();
 
+                    if (holdingShovel)
+                    {
+                        if (HOUSE_LAST_LINE<=mouseX && mouseX<=1000 && 80<=mouseY && mouseY<=600)
+                        {
+                            int row_no = find_row_no(mouseY);
+                            int column_no = find_column_no(mouseX);
+
+                            if (!rows.get(row_no).isColumnOkay(column_no))
+                            {
+                                rows.get(row_no).markEmpty(column_no);
+                                holdingShovel = false;
+                            }
+                        }
+
+                        return;
+                    }
+
                     if (plantSelected.get(0)==-1)
                     {
                         if (0<=mouseX && mouseX<=120 && 0<=mouseY && mouseY<=490)
                         {
                             long curr_time = System.nanoTime();
                             int which_plant = (int)(mouseY/100);
-                            if ((curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant] && level.score>=cost[which_plant])
+                            if (plantUnlocked[which_plant] &&
+                                (curr_time-plantAvailable[which_plant]) >= timeNeeded[which_plant] &&
+                                level.score>=cost[which_plant])
                             {
                                 plantAvailable[which_plant] = curr_time;
                                 plantSelected.set(0,which_plant);
@@ -252,17 +282,32 @@ public class Game
                                 else if (which_plant==4)
                                 {
                                     Plants plan = plant;
-                                    Timeline blast = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
-                                                    @Override
-                                                    public void handle(ActionEvent event) {
-                                                        if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
-                                                        // change imageview to boom.gif and kill zombies and remove plant 
-                                                        // may be one more timeline needed to show boom effect(nested timeline)
-                                                    }
-                                                }));
+                                    Timeline blast = new Timeline(new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
+                                        @Override
+                                        public void handle(ActionEvent event) {
+                                            p.getChildren().clear();
+                                            p.getChildren().add(new ImageView(new Image("Boom.gif")));
+
+                                            int[] row_nos = {row_no-1, row_no, row_no+1};
+                                            for (Integer r : row_nos)
+                                            {
+                                            	if (0<=r && r<=4)
+                                            	{
+	                                            	Set<Zombies> zombies = rows.get(r).getZombies();
+	                                                for (Iterator<Zombies> i = zombies.iterator(); i.hasNext(); )
+	                                                {
+	                                                    Zombies zombie = i.next();
+	                                                    if (Math.abs(zombie.getVBox().getTranslateX() - middle_point[column_no]) < 150)
+	                                                        zombie.decreaseHealth(10000);
+	                                                }
+	                                            }    
+                                            }
+                                            
+                                            root.getChildren().remove(p); rows.get(row_no).getPlants().remove(plan);
+                                        }
+                                    }));
                                     blast.setCycleCount(1);
                                     blast.play();
-
                                 }
 
                                 plantSelected.set(0,-1);
@@ -303,7 +348,29 @@ public class Game
                         public void handle(ActionEvent event) {
                             if (isPaused || !level.readyForFinalWave() || wavedone[0]) return;
                             wavedone[0] = true;
-                            //TODO: write text on the screen here
+
+                            wave_sound.play();
+                            VBox v=new VBox(10);
+                            Label l=new Label("Final Wave is Coming!!!");
+                            l.setFont(new Font(60.0));
+                            l.setTextFill(Color.web("#ff0000", 0.8));
+                            l.setStyle("-fx-color: red");
+                            l.setMinWidth(800);
+                            l.setMinHeight(800);
+                            v.setTranslateX(300);
+                            v.setTranslateY(-300);
+                            v.getChildren().add(l);
+                            root.getChildren().add(v);
+                            Timeline text_time = new Timeline(new KeyFrame(Duration.seconds(3), new EventHandler<ActionEvent>()
+                                        {
+                                            @Override
+                                            public void handle(ActionEvent event) {
+                                                root.getChildren().remove(v);
+
+                                            }}));
+                            text_time.setCycleCount(1);
+                            text_time.play();
+
                             for (int i=0; i<5; ++i)
                             {
                                 int no = i;
@@ -317,7 +384,7 @@ public class Game
                                 }));
                                 generate.setCycleCount(Timeline.INDEFINITE);
                                 generate.play();
-                            }  
+                            }
                         }
                     }));
         finalwave.setCycleCount(Timeline.INDEFINITE);
@@ -341,14 +408,39 @@ public class Game
         gc.setCycleCount(Timeline.INDEFINITE);
         gc.play();
 
+        VBox shovel = new VBox(50);
+        shovel.setSpacing(40);
+        shovel.setMaxWidth(250.0);
+        shovel.setMaxHeight(400.0);
+        Image image_s = new Image("shovel_bg_black.png");
+        ImageView view_image_s= new ImageView(image_s);
+        view_image_s.setFitHeight(75);
+        view_image_s.setFitWidth(75);
+        shovel.getChildren().add(view_image_s);
+        shovel.setTranslateX(300);
+        shovel.setOnMouseClicked(event -> { if (plantSelected.get(0)==-1) holdingShovel = !holdingShovel; });
+        root.getChildren().add(shovel);
+
         return scene;
     }
 
     private void gameover(boolean winStatus)
     {
-        (player.getAvailableLevels())[Math.max(5,level.getNo()+1)] = true;
+        isPaused = true;
         (player.getAllLevels())[level.getNo()] = null;
-        //TODO: go to level choose screen
+
+        if (winStatus)
+        {
+            (player.getAvailableLevels())[Math.min(5,level.getNo()+1)] = true;
+
+            if (1<=level_no && level_no<=3)
+                plantUnlocked[level_no+1] = true;
+
+            try { Player.serialize(player); }
+            catch (IOException exc) { }
+        }
+
+        stage.setScene(myapp.getPlayer().getLevelMenuScene());
     }
 
     private void createPeaShooter (Plants plan, boolean flag, int row_no, int column_no)
@@ -360,8 +452,7 @@ public class Game
                             if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
                             VBox res = rows.get(row_no).addPea(column_no, flag, middle_point[column_no]+2);
                             if (res==null) return;
-                            try { (new MediaPlayer(fire_pea_sound)).play(); }
-                            catch (Exception e) {}                        
+                            peasound.play();
                             root.getChildren().add(res);
                         }
                     }));
@@ -393,7 +484,7 @@ public class Game
 
             Plants plant = entry.getKey();
 
-            if (plant.getHealth() <= 0)
+            if (plant.getHealth() <= 0 || row.isColumnOkay(entry.getValue()))
             {
                 plant.getVBox().getChildren().clear();
                 row.markEmpty(entry.getValue());
@@ -451,7 +542,7 @@ public class Game
         for (Zombies zombie : row.getZombies())
         {
             if (lawnmower==null && zombie.getVBox().getTranslateX()<=HOUSE_LAST_LINE)
-            {    
+            {
                 gameover(false);
                 return;
             }
@@ -547,11 +638,6 @@ public class Game
         redundant.setDisable(true);
         redundant.setVisible(false);
 
-        Image image_s = new Image("shovel.png");
-        ImageView view_image_s= new ImageView(image_s);
-        view_image_s.setFitHeight(75);
-        view_image_s.setFitWidth(75);
-
         HBox scoreboard=new HBox();
         scoreboard.setSpacing(40);
         scoreboard.setMaxWidth(900.0);
@@ -573,7 +659,6 @@ public class Game
         b_progress.setTranslateY(20);
         b_progress.setTranslateX(-50);
 
-        scoreboard.getChildren().add(view_image_s);
         scoreboard.getChildren().add(view_image);
         scoreboard.getChildren().add(l_score);
         scoreboard.getChildren().add(b_progress);

@@ -50,10 +50,11 @@ class Row implements Serializable
         this.plants.put(plant,column);
         VBox result = plant.getVBox();
         result.setTranslateY(middle_point);
+        plant.ypos = middle_point;
         return result;
     }
 
-    public VBox addPea (int column, boolean isFreeze)
+    public VBox addPea (int column, boolean isFreeze, double x)
     {
         Peas pea = new Peas(isFreeze);
         if (zombies.isEmpty()) return null;
@@ -61,6 +62,9 @@ class Row implements Serializable
         VBox res = pea.getVBox();
         while ((res=pea.getVBox())==null);
         res.setTranslateY(middle_point+20);
+        pea.ypos = middle_point+20;
+        res.setTranslateX(x);
+        pea.xpos = x;
         return res;
     }
 
@@ -84,7 +88,9 @@ class Row implements Serializable
         VBox res;
         while ((res = zom.getVBox())==null);
         res.setTranslateY(middle_point-85);
+        zom.ypos = middle_point-85;
         res.setTranslateX(1100);
+        zom.xpos = 1100;
         return res;
     }
 

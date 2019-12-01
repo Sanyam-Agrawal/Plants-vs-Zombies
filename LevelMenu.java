@@ -28,7 +28,7 @@ public class LevelMenu
         BorderPane root = new BorderPane();
         VBox menuVBox = new VBox(10);
 
-        boolean available_levels[]=myapp.getPlayer().getAvailabelLevels();
+        boolean available_levels[]=myapp.getPlayer().getAvailableLevels();
         level_buttons=new Button[6];
         menuVBox.setAlignment(Pos.CENTER);
         for(int i=1;i<6;i++)

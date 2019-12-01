@@ -1,4 +1,3 @@
-
 import javafx.stage.*;
 import javafx.event.*;
 import javafx.scene.image.*;
@@ -19,14 +18,15 @@ public class Game
 {
     private BorderPane root;
     private double mouseX, mouseY;
-    private int progress=0;
-    private Button l_score;
+    private Button l_score, b_progress;
     public Stage stage;
     public App myapp;
     private ArrayList<ImageView> plantmenuimageviews = new ArrayList<>();
     private ArrayList<Image> plantmenuimages = new ArrayList<>();
     private ArrayList<Image> plantmenublurredimages = new ArrayList<>();
     private TranslateTransition move_sun;
+    private ArrayList<Row> rows;
+    private int middle_point[];
     private Map<Timeline,ArrayList<Boolean>> allTimelines = new HashMap<>();
     private Player player;
     private Level level;
@@ -78,15 +78,42 @@ public class Game
 
         root.setLeft(gameVBox);
 
-        ArrayList<Row> rows = new ArrayList<>();
+        rows = level.getRows();
         for (int i=0; i<5; ++i)
         {
-            rows.add( new Row(95 + i*100) );
-            VBox mower;
-            while ((mower = rows.get(i).getLawnMower().getVBox()) == null);
-            root.getChildren().add(mower);
-            mower.setTranslateX(180);
-            mower.setTranslateY(rows.get(i).getMiddle());
+            if (rows.get(i).getLawnMower() != null)
+            {    
+                rows.get(i).getLawnMower().resetVBox();
+                VBox mower = rows.get(i).getLawnMower().getVBox();
+                root.getChildren().add(mower);
+            }
+
+            for (Map.Entry<Plants,Integer> plant_m : rows.get(i).getPlants().entrySet())
+            {
+                Plants plant = plant_m.getKey();
+
+                plant.resetVBox();
+                root.getChildren().add(plant.getVBox());
+
+                if (plant instanceof PeaShooter)
+                    createPeaShooter(plant,false,i,plant_m.getValue());
+                else if (plant instanceof FreezePeaShooter)
+                    createPeaShooter(plant,true,i,plant_m.getValue());
+                else if (plant instanceof SunFlower)
+                    createSunFlowerAni(plant,i,((SunFlower)plant).getColumn_no());
+            }
+
+            for (Peas pea : rows.get(i).getPeas())
+            {
+                pea.resetVBox();
+                root.getChildren().add(pea.getVBox());
+            }
+
+            for (Zombies zombie : rows.get(i).getZombies())
+            {
+                zombie.resetVBox();
+                root.getChildren().add(zombie.getVBox());
+            }
         }
 
         Timeline sungen = new Timeline(new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>()
@@ -99,9 +126,7 @@ public class Game
         sungen.setCycleCount(Timeline.INDEFINITE);
         sungen.play();
 
-        long[] plantAvailable = new long[5];
-        long start_time = System.nanoTime();
-        for (int i=0; i<5; ++i) plantAvailable[i] = start_time;
+        long[] plantAvailable = level.getTimes();
 
         long[] timeNeeded = {5000000000L, 5000000000L, 10000000000L, 15000000000L, 25000000000L};
         int[] cost = {50,100,175,50,150};
@@ -132,6 +157,7 @@ public class Game
                             }
 
                             l_score.setText(""+level.score);
+                            b_progress.setText(""+level.getProgress());
 
                             for (Row row : rows)
                             {
@@ -140,6 +166,8 @@ public class Game
                                 handleLawnMowers(row);
                                 handleZombies(row);
                             }
+
+                            if (level.waveFinished()) gameover(true);
                         }
                     }));
 
@@ -149,9 +177,10 @@ public class Game
         Scene scene=new Scene(root,1100,600);
         scene.getStylesheets().add(Game.class.getResource("game.css").toExternalForm());
 
-        int[] middle_point = {(260+340)/2, (340+415)/2, (415+505)/2, (505+580)/2, (580+665)/2, (665+750)/2,
+        int[] random_array = {(260+340)/2, (340+415)/2, (415+505)/2, (505+580)/2, (580+665)/2, (665+750)/2,
                 (750+820)/2, (820+910)/2, (910+1000)/2};
-
+        middle_point = random_array;
+         
         ArrayList<Integer> plantSelected = new ArrayList<>();
         plantSelected.add(-1);
 
@@ -193,7 +222,7 @@ public class Game
                                 Plants plant = null;
                                 switch(which_plant)
                                 {
-                                    case 0: plant = new SunFlower(); break;
+                                    case 0: plant = new SunFlower(column_no); break;
                                     case 1: plant = new PeaShooter(); break;
                                     case 2: plant = new FreezePeaShooter(); break;
                                     case 3: plant = new Wallnut(); break;
@@ -206,6 +235,7 @@ public class Game
 
                                 VBox p = rows.get(row_no).addPlant(plant,column_no);
                                 p.setTranslateX(middle_point[column_no]-40);
+                                plant.xpos = middle_point[column_no]-40;
                                 root.getChildren().add(p);
                                 scene.setCursor(default_cursor);
 
@@ -213,33 +243,11 @@ public class Game
                                 {
                                     Plants plan = plant;
                                     boolean flag = (which_plant==2);
-                                    Timeline peagen = new Timeline(new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>()
-                                                {
-                                                    @Override
-                                                    public void handle(ActionEvent event) {
-                                                        if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
-                                                        VBox res = rows.get(row_no).addPea(column_no, flag);
-                                                        if (res==null) return;
-                                                        (new MediaPlayer(fire_pea_sound)).play();
-                                                        res.setTranslateX(middle_point[column_no]+2);
-                                                        root.getChildren().add(res);
-                                                    }
-                                                }));
-                                    peagen.setCycleCount(Timeline.INDEFINITE);
-                                    peagen.play();
+                                    createPeaShooter(plan,flag,row_no,column_no);
                                 }
                                 else if (which_plant==0)
                                 {
-                                    Plants plan = plant;
-                                    Timeline sunfgen = new Timeline(new KeyFrame(Duration.millis(6000), new EventHandler<ActionEvent>() {
-                                                    @Override
-                                                    public void handle(ActionEvent event) {
-                                                        if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
-                                                        VBox psuned = produceSun(middle_point[column_no]-30,rows.get(row_no).getMiddle());
-                                                    }
-                                                }));
-                                    sunfgen.setCycleCount(Timeline.INDEFINITE);
-                                    sunfgen.play();
+                                    createSunFlowerAni(plant,row_no,column_no);
                                 }
                                 else if (which_plant==4)
                                 {
@@ -279,12 +287,37 @@ public class Game
                     {
                         @Override
                         public void handle(ActionEvent event) {
+                            if (isPaused || !level.spawn()) return;
                             int row_no = r.nextInt(5);
                             root.getChildren().add(rows.get(row_no).spawnZombie(level.getSeverity()));
                         }
                     }));
         zomgen.setCycleCount(Timeline.INDEFINITE);
         zomgen.play();
+
+        Timeline finalwave = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>()
+                    {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            if (isPaused || !level.readyForFinalWave()) return;
+                            for (int i=0; i<5; ++i)
+                            {    
+                                int no = i;
+                                Timeline generate = new Timeline(new KeyFrame(Duration.seconds(3), new EventHandler<ActionEvent>()
+                                {
+                                    @Override
+                                    public void handle(ActionEvent event) {
+                                        if (isPaused || !level.waveRemaining(no)) return;
+                                        root.getChildren().add(rows.get(no).spawnZombie(level.getSeverity()));
+                                    }
+                                }));
+                                generate.setCycleCount(Timeline.INDEFINITE);
+                                generate.play();
+                            }    
+                        }
+                    }));
+        finalwave.setCycleCount(Timeline.INDEFINITE);
+        finalwave.play();        
 
         Timeline gc = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>()
                     {
@@ -309,10 +342,44 @@ public class Game
 
     private void gameover(boolean winStatus)
     {
-        //???
+        (player.getAvailableLevels())[Math.max(5,level.getNo()+1)] = true;
+        (player.getAllLevels())[level.getNo()] = null;
+        //TODO: go to level choose screen
     }
 
-    void handlePlants(Row row)
+    private void createPeaShooter (Plants plan, boolean flag, int row_no, int column_no)
+    {
+        Timeline peagen = new Timeline(new KeyFrame(Duration.millis(1500), new EventHandler<ActionEvent>()
+                    {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
+                            VBox res = rows.get(row_no).addPea(column_no, flag, middle_point[column_no]+2);
+                            if (res==null) return;
+                            try { (new MediaPlayer(fire_pea_sound)).play(); }
+                            catch (Exception e) {}                        
+                            root.getChildren().add(res);
+                        }
+                    }));
+        peagen.setCycleCount(Timeline.INDEFINITE);
+        peagen.play();
+    }
+
+    private void createSunFlowerAni (Plants plant, int row_no, int column_no)
+    {
+        Plants plan = plant;
+        Timeline sunfgen = new Timeline(new KeyFrame(Duration.millis(6000), new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            if (isPaused || plan.getVBox().getChildren().isEmpty()) return;
+                            VBox psuned = produceSun(middle_point[column_no]-30,rows.get(row_no).getMiddle());
+                        }
+                    }));
+        sunfgen.setCycleCount(Timeline.INDEFINITE);
+        sunfgen.play();
+    }
+
+    private void handlePlants(Row row)
     {
         Map<Plants,Integer> plants = row.getPlants();
 
@@ -331,7 +398,7 @@ public class Game
         }
     }
 
-    void handlePeas(Row row)
+    private void handlePeas(Row row)
     {
         Set<Peas> peas = row.getPeas();
 
@@ -350,6 +417,7 @@ public class Game
             for (Zombies zombie : row.getZombies())
             {
                 double diff = zombie.getVBox().getTranslateX() - pea.getVBox().getTranslateX();
+
                 if (-35<=diff && diff<=5)
                 {
                     zombie.decreaseHealth(pea.getAttack());
@@ -364,11 +432,15 @@ public class Game
             }
 
             if (stillThere)
-                pea.getVBox().setTranslateX(pea.getVBox().getTranslateX() + pea.getXdelta());
+            {    
+                double new_pos = pea.getVBox().getTranslateX() + pea.getXdelta();
+                pea.getVBox().setTranslateX(new_pos);
+                pea.xpos = new_pos;
+            }
         }
     }
 
-    void handleLawnMowers(Row row)
+    private void handleLawnMowers(Row row)
     {
         LawnMower lawnmower = row.getLawnMower();
 
@@ -391,7 +463,12 @@ public class Game
 
         if (lawnmower==null) return;
 
-        if (lawnmower.moves()) lawnmower.getVBox().setTranslateX(lawnmower.getVBox().getTranslateX() + lawnmower.getXdelta());
+        if (lawnmower.moves())
+        {
+            double new_pos = lawnmower.getVBox().getTranslateX() + lawnmower.getXdelta();
+            lawnmower.getVBox().setTranslateX(new_pos);
+            lawnmower.xpos = new_pos;
+        }
 
         if (lawnmower.getVBox().getTranslateX() >= RIGHTMOST_LINE)
         {
@@ -400,7 +477,7 @@ public class Game
         }
     }
 
-    void handleZombies(Row row)
+    private void handleZombies(Row row)
     {
         Set<Zombies> zombies = row.getZombies();
 
@@ -411,6 +488,7 @@ public class Game
 
             if (zombie.getHealth() <= 0)
             {
+                level.increaseKill();
                 zombie.getVBox().getChildren().clear();
                 i.remove();
                 continue;
@@ -428,7 +506,12 @@ public class Game
                 }
             }
 
-            if (move_flag) zombie.getVBox().setTranslateX(zombie.getVBox().getTranslateX() + zombie.getXdelta());
+            if (move_flag)
+            {
+                double new_pos = zombie.getVBox().getTranslateX() + zombie.getXdelta();
+                zombie.getVBox().setTranslateX(new_pos);
+                zombie.xpos = new_pos;
+            }    
         }
     }
 
@@ -469,7 +552,7 @@ public class Game
         scoreboard.setSpacing(40);
         scoreboard.setMaxWidth(900.0);
         scoreboard.setMaxHeight(500.0);
-        Image image = new Image("sun.png");
+        Image image = new Image("fsun.png");
         ImageView view_image= new ImageView(image);
 
         l_score=new Button(""+level.score);
@@ -479,8 +562,7 @@ public class Game
         l_score.setTranslateY(10);
         l_score.setTranslateX(-50);
 
-        this.progress=54;
-        Button b_progress=new Button("Progress = "+this.progress+"%");
+        b_progress=new Button("Progress = "+level.getProgress()+"%");
         b_progress.setFont(Font.font("Serif", FontWeight.BOLD, 15));
         b_progress.setStyle("-fx-text-fill: #0000ff; -fx-background-color: #99ffcc;");
         b_progress.setMinWidth(200);
@@ -524,6 +606,7 @@ public class Game
                 sun.getChildren().clear();
             }
         );
+
         return sun;
     }
 

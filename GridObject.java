@@ -15,6 +15,7 @@ import java.io.*;
 
 abstract class GridObject implements Serializable
 {
+	public double xpos, ypos;
 	protected double xdelta, ydelta;
 
 	protected VBox vBox;
@@ -26,6 +27,13 @@ abstract class GridObject implements Serializable
 	}
 
 	protected abstract VBox createVBox();
+
+	public void resetVBox()
+	{
+		this.vBox = createVBox();
+		this.vBox.setTranslateX(xpos);
+		this.vBox.setTranslateY(ypos);
+	}
 
 	public VBox getVBox() { return this.vBox; }
 	public void setVBox (VBox _VBox) { this.vBox = _VBox; }

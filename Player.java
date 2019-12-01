@@ -40,9 +40,14 @@ class Player
         return all_levels[level_no];
     }
 
-    public boolean[] getAvailabelLevels()
+    public boolean[] getAvailableLevels()
     {
         return available_levels;
+    }
+
+    public Level[] getAllLevels()
+    {
+        return all_levels;
     }
 
 }

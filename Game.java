@@ -295,13 +295,17 @@ public class Game
         zomgen.setCycleCount(Timeline.INDEFINITE);
         zomgen.play();
 
+        boolean[] wavedone = {false};
+
         Timeline finalwave = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>()
                     {
                         @Override
                         public void handle(ActionEvent event) {
-                            if (isPaused || !level.readyForFinalWave()) return;
+                            if (isPaused || !level.readyForFinalWave() || wavedone[0]) return;
+                            wavedone[0] = true;
+                            //TODO: write text on the screen here
                             for (int i=0; i<5; ++i)
-                            {    
+                            {
                                 int no = i;
                                 Timeline generate = new Timeline(new KeyFrame(Duration.seconds(3), new EventHandler<ActionEvent>()
                                 {
@@ -313,7 +317,7 @@ public class Game
                                 }));
                                 generate.setCycleCount(Timeline.INDEFINITE);
                                 generate.play();
-                            }    
+                            }  
                         }
                     }));
         finalwave.setCycleCount(Timeline.INDEFINITE);
